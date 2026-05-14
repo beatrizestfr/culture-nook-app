@@ -1,0 +1,27 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "title": "Inception",
+      "type": "movie",
+      "status": "done",
+      "rating": 5,
+      "notes": "Mind-bending masterpiece"
+    },
+    {
+      "id": 2,
+      "title": "Dune",
+      "type": "book",
+      "status": "in-progress",
+      "rating": 4,
+      "notes": "Epic world building"
+    }
+  ],
+  "lists": [
+    {
+      "id": 1,
+      "name": "Summer Reads",
+      "itemIds": [2]
+    }
+  ]
+}
