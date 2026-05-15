@@ -2,10 +2,10 @@
   "items": [
     {
       "id": 1,
-      "title": "Inception",
+      "title": "Inceptiones",
       "type": "movie",
       "status": "done",
-      "rating": 5,
+      "rating": "3",
       "notes": "Mind-bending masterpiece"
     },
     {
@@ -21,7 +21,9 @@
     {
       "id": 1,
       "name": "Summer Reads",
-      "itemIds": [2]
+      "itemIds": [
+        2
+      ]
     }
   ]
 }
