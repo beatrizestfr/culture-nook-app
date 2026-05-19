@@ -1,84 +1,118 @@
-import { useParams, Link } from 'react-router-dom';
-import { useLibrary } from '../context/LibraryContext';
 import { useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useLibrary } from '../context/LibraryContext';
+import MediaCover from '../components/MediaCover';
 
-function ListDetailPage() {
+export default function ListDetailPage() {
   const { id } = useParams();
-  const { lists, items, updateList } = useLibrary();
+  const { lists, items, updateList, deleteList, loading } = useLibrary();
+  const navigate = useNavigate();
   const [selectedItemId, setSelectedItemId] = useState('');
+  const [renaming, setRenaming] = useState(false);
+  const [newName, setNewName] = useState('');
 
-  const list = lists.find(l => l.id === parseInt(id));
-  if (!list) return <p>List not found.</p>;
+  const list = lists.find(l => l.id === Number(id));
 
-  const listItems = items.filter(item => list.itemIds.includes(item.id));
+  if (loading) return <p style={{ padding: 40, color: 'var(--text-secondary)' }}>Loading list...</p>;
 
-  // Items NOT yet in this list (available to add)
-  const availableItems = items.filter(item => !list.itemIds.includes(item.id));
+  if (!list) {
+    return (
+      <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-secondary)' }}>
+        <p style={{ fontFamily: 'var(--font-serif)', fontSize: 22, marginBottom: 8 }}>List not found</p>
+        <p style={{ fontSize: 14, marginBottom: 18 }}>This list does not exist for this account.</p>
+        <Link to="/lists"><button className="btn-primary">Back to Lists</button></Link>
+      </div>
+    );
+  }
 
-  const handleAddItem = async () => {
+  const listItemIds = list.itemIds || [];
+  const listItems = items.filter(item => listItemIds.includes(item.id));
+  const availableItems = items.filter(item => !listItemIds.includes(item.id));
+
+  async function handleAddItem(e) {
+    e.preventDefault();
     if (!selectedItemId) return;
-    const updated = { ...list, itemIds: [...list.itemIds, parseInt(selectedItemId)] };
-    await updateList(list.id, updated);
-    setSelectedItemId('');
-  };
 
-  const handleRemoveItem = async (itemId) => {
-    const updated = { ...list, itemIds: list.itemIds.filter(i => i !== itemId) };
-    await updateList(list.id, updated);
-  };
+    const itemId = Number(selectedItemId);
+    await updateList(list.id, { ...list, itemIds: [...listItemIds, itemId] });
+    setSelectedItemId('');
+  }
+
+  async function handleRemoveItem(itemId) {
+    await updateList(list.id, { ...list, itemIds: listItemIds.filter(id => id !== itemId) });
+  }
+
+  async function handleRename(e) {
+    e.preventDefault();
+    if (!newName.trim()) return;
+
+    await updateList(list.id, { ...list, name: newName.trim() });
+    setRenaming(false);
+  }
+
+  async function handleDelete() {
+    if (window.confirm(`Delete list "${list.name}"?`)) {
+      await deleteList(list.id);
+      navigate('/lists');
+    }
+  }
 
   return (
     <div>
-      <Link to="/lists"><button>← Back to Lists</button></Link>
+      <Link to="/lists" style={{ display: 'inline-block', color: 'var(--text-secondary)', fontSize: 14, marginBottom: 24 }}>
+        Back to Lists
+      </Link>
 
-      <h1 style={{ marginTop: '16px' }}>{list.name}</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 20, marginBottom: 24, flexWrap: 'wrap' }}>
+        <div>
+          {renaming ? (
+            <form onSubmit={handleRename} style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <input value={newName} onChange={e => setNewName(e.target.value)} autoFocus />
+              <button type="submit" className="btn-primary">Save</button>
+              <button type="button" className="btn-secondary" onClick={() => setRenaming(false)}>Cancel</button>
+            </form>
+          ) : (
+            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 32, marginBottom: 4 }}>{list.name}</h1>
+          )}
+          {list.description && <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>{list.description}</p>}
+          <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 8 }}>{listItems.length} items</p>
+        </div>
 
-      {/* Add item to list */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', marginTop: '8px' }}>
-        <select
-          value={selectedItemId}
-          onChange={e => setSelectedItemId(e.target.value)}
-          style={{ padding: '8px', border: '1px solid #e2e8f0', borderRadius: '6px', flex: 1 }}
-        >
-          <option value="">— Add an item to this list —</option>
-          {availableItems.map(item => (
-            <option key={item.id} value={item.id}>
-              {item.title} ({item.type})
-            </option>
-          ))}
-        </select>
-        <button onClick={handleAddItem}>Add</button>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button className="btn-secondary" onClick={() => { setRenaming(true); setNewName(list.name); }}>Rename</button>
+          <button className="btn-danger" onClick={handleDelete}>Delete list</button>
+        </div>
       </div>
 
-      {listItems.length === 0 && <p style={{ color: '#718096' }}>No items in this list yet.</p>}
+      <form onSubmit={handleAddItem} style={{ display: 'flex', gap: 10, marginBottom: 28 }}>
+        <select value={selectedItemId} onChange={e => setSelectedItemId(e.target.value)}>
+          <option value="">Choose an item to add</option>
+          {availableItems.map(item => (
+            <option key={item.id} value={item.id}>{item.title} ({item.type})</option>
+          ))}
+        </select>
+        <button type="submit" className="btn-primary" disabled={!selectedItemId}>Add item</button>
+      </form>
 
-      {listItems.map(item => (
-        <div key={item.id} style={{
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          padding: '12px',
-          marginBottom: '8px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <div>
-            <h3 style={{ margin: '0 0 4px' }}>{item.title}</h3>
-            <p style={{ margin: 0, color: '#718096' }}>{item.type} · {'⭐'.repeat(item.rating)}</p>
-          </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <Link to={`/items/${item.id}`}><button>View</button></Link>
-            <button
-              onClick={() => handleRemoveItem(item.id)}
-              style={{ color: 'red' }}
-            >
-              Remove
-            </button>
-          </div>
+      {listItems.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
+          <p style={{ fontFamily: 'var(--font-serif)', fontSize: 20, marginBottom: 8 }}>This list is empty</p>
+          <p style={{ fontSize: 14 }}>Add items from your library with the selector above.</p>
         </div>
-      ))}
+      ) : (
+        <div className="card-grid">
+          {listItems.map(item => (
+            <div key={item.id}>
+              <Link to={`/items/${item.id}`}>
+                <MediaCover item={item} />
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 16, marginTop: 8 }}>{item.title}</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: 13 }}>{item.type} - Rating: {item.rating || 0}/5</p>
+              </Link>
+              <button className="btn-secondary" onClick={() => handleRemoveItem(item.id)} style={{ marginTop: 8 }}>Remove</button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
-
-export default ListDetailPage;

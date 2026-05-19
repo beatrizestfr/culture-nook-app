@@ -1,73 +1,216 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const LibraryContext = createContext();
+const API_URL = 'http://localhost:3001';
+
+function getUserId(email) {
+  return email.trim().toLowerCase();
+}
 
 export function LibraryProvider({ children }) {
   const [items, setItems] = useState([]);
   const [lists, setLists] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem('cnook_user');
+    return saved ? JSON.parse(saved) : null;
+  });
 
   useEffect(() => {
-    fetch('http://localhost:3001/items')
-      .then(res => res.json())
-      .then(data => setItems(data));
+    async function loadData() {
+      if (!user) {
+        setItems([]);
+        setLists([]);
+        return;
+      }
 
-    fetch('http://localhost:3001/lists')
-      .then(res => res.json())
-      .then(data => setLists(data));
-  }, []);
+      setLoading(true);
+      setError('');
+      setItems([]);
+      setLists([]);
 
-  const addItem = async (newItem) => {
-    const res = await fetch('http://localhost:3001/items', {
+      try {
+        const userId = encodeURIComponent(user.id);
+
+        const itemsResponse = await fetch(`${API_URL}/items?userId=${userId}`);
+        if (!itemsResponse.ok) throw new Error('Could not load items');
+        const loadedItems = await itemsResponse.json();
+
+        const listsResponse = await fetch(`${API_URL}/lists?userId=${userId}`);
+        if (!listsResponse.ok) throw new Error('Could not load lists');
+        const loadedLists = await listsResponse.json();
+
+        setItems(loadedItems);
+        setLists(loadedLists);
+      } catch (err) {
+        setError(err.message);
+      }
+
+      setLoading(false);
+    }
+
+    loadData();
+  }, [user]);
+
+  function login(email, name = '') {
+    const cleanEmail = email.trim().toLowerCase();
+    const displayName = name.trim() || cleanEmail.split('@')[0];
+    const currentUser = {
+      id: getUserId(cleanEmail),
+      email: cleanEmail,
+      name: displayName,
+      initials: displayName.slice(0, 2).toUpperCase(),
+    };
+
+    localStorage.setItem('cnook_user', JSON.stringify(currentUser));
+    setItems([]);
+    setLists([]);
+    setUser(currentUser);
+  }
+
+  function logout() {
+    localStorage.removeItem('cnook_user');
+    setUser(null);
+    setItems([]);
+    setLists([]);
+  }
+
+  async function addItem(newItem) {
+    if (!user) throw new Error('You must be signed in to add an item.');
+
+    const itemToSave = {
+      ...newItem,
+      userId: user.id,
+      rating: Number(newItem.rating),
+      cover: newItem.cover?.trim() || '',
+      genres: newItem.genres || [],
+      vibes: newItem.vibes || [],
+    };
+
+    const response = await fetch(`${API_URL}/items`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newItem)
+      body: JSON.stringify(itemToSave),
     });
-    const saved = await res.json();
-    setItems(prev => [...prev, saved]);
-  };
 
-  const updateItem = async (id, updated) => {
-    const res = await fetch(`http://localhost:3001/items/${id}`, {
+    if (!response.ok) throw new Error('Could not add item');
+    const savedItem = await response.json();
+    setItems(prevItems => [...prevItems, savedItem]);
+    return savedItem;
+  }
+
+  async function updateItem(id, updatedItem) {
+    if (!user) throw new Error('You must be signed in to update an item.');
+
+    const oldItem = items.find(item => item.id === id);
+    if (!oldItem || oldItem.userId !== user.id) throw new Error('Item not found');
+
+    const itemToSave = {
+      ...oldItem,
+      ...updatedItem,
+      userId: user.id,
+      rating: Number(updatedItem.rating),
+      cover: updatedItem.cover?.trim() || '',
+      genres: updatedItem.genres || [],
+      vibes: updatedItem.vibes || [],
+    };
+
+    const response = await fetch(`${API_URL}/items/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updated)
+      body: JSON.stringify(itemToSave),
     });
-    const saved = await res.json();
-    setItems(prev => prev.map(i => i.id === id ? saved : i));
-  };
 
-  const deleteItem = async (id) => {
-    await fetch(`http://localhost:3001/items/${id}`, { method: 'DELETE' });
-    setItems(prev => prev.filter(i => i.id !== id));
-  };
+    if (!response.ok) throw new Error('Could not update item');
+    const savedItem = await response.json();
+    setItems(prevItems => prevItems.map(item => item.id === id ? savedItem : item));
+  }
 
-  const addList = async (newList) => {
-    const res = await fetch('http://localhost:3001/lists', {
+  async function deleteItem(id) {
+    if (!user) throw new Error('You must be signed in to delete an item.');
+
+    const oldItem = items.find(item => item.id === id);
+    if (!oldItem || oldItem.userId !== user.id) throw new Error('Item not found');
+
+    const response = await fetch(`${API_URL}/items/${id}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error('Could not delete item');
+
+    setItems(prevItems => prevItems.filter(item => item.id !== id));
+    setLists(prevLists => prevLists.map(list => ({
+      ...list,
+      itemIds: (list.itemIds || []).filter(itemId => itemId !== id),
+    })));
+  }
+
+  async function addList(newList) {
+    if (!user) throw new Error('You must be signed in to create a list.');
+
+    const listToSave = {
+      name: newList.name.trim(),
+      description: newList.description?.trim() || '',
+      itemIds: [],
+      userId: user.id,
+    };
+
+    const response = await fetch(`${API_URL}/lists`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...newList, itemIds: [] })
+      body: JSON.stringify(listToSave),
     });
-    const saved = await res.json();
-    setLists(prev => [...prev, saved]);
-  };
 
-  const updateList = async (id, updated) => {
-  const res = await fetch(`http://localhost:3001/lists/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(updated)
-  });
-  const saved = await res.json();
-  setLists(prev => prev.map(l => l.id === id ? saved : l));
-};
+    if (!response.ok) throw new Error('Could not create list');
+    const savedList = await response.json();
+    setLists(prevLists => [...prevLists, savedList]);
+    return savedList;
+  }
 
-const deleteList = async (id) => {
-  await fetch(`http://localhost:3001/lists/${id}`, { method: 'DELETE' });
-  setLists(prev => prev.filter(l => l.id !== id));
-};
+  async function updateList(id, updatedList) {
+    if (!user) throw new Error('You must be signed in to update a list.');
+
+    const oldList = lists.find(list => list.id === id);
+    if (!oldList || oldList.userId !== user.id) throw new Error('List not found');
+
+    const itemIds = (updatedList.itemIds || []).filter(itemId => {
+      return items.some(item => item.id === itemId);
+    });
+
+    const listToSave = {
+      ...oldList,
+      ...updatedList,
+      itemIds,
+      userId: user.id,
+    };
+
+    const response = await fetch(`${API_URL}/lists/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(listToSave),
+    });
+
+    if (!response.ok) throw new Error('Could not update list');
+    const savedList = await response.json();
+    setLists(prevLists => prevLists.map(list => list.id === id ? savedList : list));
+  }
+
+  async function deleteList(id) {
+    if (!user) throw new Error('You must be signed in to delete a list.');
+
+    const oldList = lists.find(list => list.id === id);
+    if (!oldList || oldList.userId !== user.id) throw new Error('List not found');
+
+    const response = await fetch(`${API_URL}/lists/${id}`, { method: 'DELETE' });
+    if (!response.ok) throw new Error('Could not delete list');
+    setLists(prevLists => prevLists.filter(list => list.id !== id));
+  }
 
   return (
-    <LibraryContext.Provider value={{ items, lists, addItem, updateItem, deleteItem, addList, updateList, deleteList }}>
+    <LibraryContext.Provider value={{
+      user, login, logout,
+      items, lists, loading, error,
+      addItem, updateItem, deleteItem,
+      addList, updateList, deleteList,
+    }}>
       {children}
     </LibraryContext.Provider>
   );

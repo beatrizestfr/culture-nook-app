@@ -1,30 +1,45 @@
 import { Link } from 'react-router-dom';
-import { useLibrary } from '../context/LibraryContext';
+import MediaCover from './MediaCover';
 
-function ItemCard({ item }) {
-  const { deleteItem } = useLibrary();
+export default function ItemCard({ item }) {
+  const dotColor = item.status === 'done' ? '#4caf7d' : item.status === 'in-progress' ? '#e6a817' : '#a0aec0';
 
   return (
-    <div style={{
-      border: '1px solid #e2e8f0',
-      borderRadius: '8px',
-      padding: '16px',
-      marginBottom: '12px'
-    }}>
-      <h3 style={{ margin: '0 0 8px' }}>{item.title}</h3>
-      <p style={{ color: '#718096', margin: '0 0 4px' }}>
-        {item.type} · {item.status} · {'⭐'.repeat(item.rating)}
-      </p>
-      <p style={{ color: '#4a5568', margin: '0 0 12px', fontStyle: 'italic' }}>
-        {item.notes}
-      </p>
-      <div style={{ display: 'flex', gap: '8px' }}>
-        <Link to={`/items/${item.id}`}><button>View</button></Link>
-        <Link to={`/edit/${item.id}`}><button>Edit</button></Link>
-        <button onClick={() => deleteItem(item.id)} style={{ color: 'red' }}>Delete</button>
+    <Link to={`/items/${item.id}`} style={{ display: 'block', textDecoration: 'none' }}>
+      <div style={{ cursor: 'pointer' }} className="item-card-hover">
+        <div style={{ position: 'relative', marginBottom: 10 }}>
+          <MediaCover item={item} />
+          <div style={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            width: 10,
+            height: 10,
+            borderRadius: '50%',
+            background: dotColor,
+            border: '2px solid white',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
+            zIndex: 2,
+          }} />
+        </div>
+
+        <p style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.8, fontWeight: 600, marginBottom: 3 }}>
+          {item.type?.toUpperCase()}
+        </p>
+        <h3 style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.3, marginBottom: 2, fontFamily: 'var(--font-serif)' }}>
+          {item.title}
+        </h3>
+        {item.creator && (
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>{item.creator}</p>
+        )}
+        {(item.genres?.length > 0 || item.vibes?.length > 0) && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 5 }}>
+            {item.genres?.slice(0, 2).map(g => <span key={g} className="tag" style={{ fontSize: 11, padding: '2px 7px' }}>{g}</span>)}
+            {item.vibes?.slice(0, 1).map(v => <span key={v} className="tag tag-vibe" style={{ fontSize: 11, padding: '2px 7px' }}>{v}</span>)}
+          </div>
+        )}
+        <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Rating: {item.rating || 0}/5</p>
       </div>
-    </div>
+    </Link>
   );
 }
-
-export default ItemCard;

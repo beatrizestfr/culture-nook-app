@@ -56,7 +56,7 @@ function AddItemForm({ onSubmit, initialData = {}, buttonLabel = 'Save' }) {
 
       <div style={{ marginBottom: '12px' }}>
         <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
-          Rating: {rating} ⭐
+          Rating: {rating} / 5
         </label>
         <input
           type="range"

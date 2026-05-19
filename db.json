@@ -1,44 +1,232 @@
 {
   "items": [
     {
+      "genres": [
+        "Drama",
+        "Mystery"
+      ],
+      "vibes": [
+        "dark academia",
+        "unsettling",
+        "test"
+      ],
       "id": 1,
-      "title": "Inceptiones",
-      "type": "movie",
+      "userId": "_demo",
+      "title": "The Secret History",
+      "creator": "Donna Tartt",
+      "year": "1992",
+      "type": "book",
       "status": "done",
-      "rating": "3",
-      "notes": "Mind-bending masterpiece"
+      "rating": 3,
+      "notes": "A book that completely consumed me.",
+      "cover": "https://covers.openlibrary.org/b/id/8739161-L.jpg"
     },
     {
       "id": 2,
+      "userId": "_demo",
+      "title": "Midsommar",
+      "creator": "Ari Aster",
+      "year": "2019",
+      "type": "movie",
+      "status": "done",
+      "rating": 4,
+      "notes": "Deeply unsettling and visually stunning.",
+      "cover": "",
+      "genres": [
+        "Horror"
+      ],
+      "vibes": [
+        "unsettling"
+      ]
+    },
+    {
+      "id": 4,
+      "userId": "_demo",
+      "title": "Blue",
+      "creator": "Joni Mitchell",
+      "year": "1971",
+      "type": "music",
+      "status": "done",
+      "rating": 5,
+      "notes": "Timeless.",
+      "cover": "",
+      "genres": [
+        "Indie"
+      ],
+      "vibes": [
+        "timeless",
+        "melancholic"
+      ]
+    },
+    {
+      "id": 5,
+      "userId": "_demo",
+      "title": "Paterson",
+      "creator": "Jim Jarmusch",
+      "year": "2016",
+      "type": "movie",
+      "status": "done",
+      "rating": 5,
+      "notes": "Gentle and meditative.",
+      "cover": "",
+      "genres": [
+        "Indie"
+      ],
+      "vibes": [
+        "cozy"
+      ]
+    },
+    {
+      "id": 6,
+      "userId": "_demo",
       "title": "Dune",
+      "creator": "Frank Herbert",
+      "year": "1965",
       "type": "book",
       "status": "in-progress",
       "rating": 4,
-      "notes": "Epic world building"
+      "notes": "Epic world building.",
+      "cover": "https://covers.openlibrary.org/b/id/8231528-L.jpg",
+      "genres": [
+        "Sci-Fi",
+        "Fantasy"
+      ],
+      "vibes": [
+        "epic"
+      ]
     },
     {
       "title": "probando probando ",
-      "type": "movie",
+      "creator": "test1",
+      "year": "",
+      "type": "book",
       "status": "done",
-      "rating": "2",
-      "notes": "jadflakjsfd",
-      "id": 3
+      "cover": "https://www.google.com/imgres?q=cat&imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F4%2F4d%2FCat_November_2010-1a.jpg%2F960px-Cat_November_2010-1a.jpg&imgrefurl=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FTabby_cat&docid=oNx0iOzXSsdzRM&tbnid=qbSS319ZRpsjqM&vet=12ahUKEwi4tLuPu8WUAxVOOPsDHfNRLOUQnPAOegQIHRAB..i&w=960&h=1282&hcb=2&ved=2ahUKEwi4tLuPu8WUAxVOOPsDHfNRLOUQnPAOegQIHRAB",
+      "genres": [
+        "Historical"
+      ],
+      "rating": 5,
+      "notes": "testing ",
+      "vibes": [
+        "cat"
+      ],
+      "id": 7,
+      "userId": "_demo"
+    },
+    {
+      "title": "yyyyyy",
+      "creator": "",
+      "year": "",
+      "type": "movie",
+      "status": "planned",
+      "cover": "",
+      "genres": [],
+      "rating": 3,
+      "notes": "",
+      "vibes": [],
+      "id": 8,
+      "userId": "_demo"
+    },
+    {
+      "title": "libro de bea ",
+      "creator": "",
+      "year": "",
+      "type": "movie",
+      "status": "planned",
+      "cover": "",
+      "genres": [
+        "Mystery",
+        "Romance",
+        "Horror"
+      ],
+      "rating": 5,
+      "notes": "ekjraejrg",
+      "vibes": [
+        "cat"
+      ],
+      "userId": "bea@gmail.com",
+      "id": 9
+    },
+    {
+      "title": "libro lola ",
+      "creator": "",
+      "year": "",
+      "type": "book",
+      "status": "planned",
+      "cover": "",
+      "genres": [
+        "Romance"
+      ],
+      "rating": 3,
+      "notes": "hkljhga",
+      "vibes": [
+        "dog"
+      ],
+      "userId": "lola@gmail.com",
+      "id": 10
+    },
+    {
+      "title": "peli de bea",
+      "creator": "",
+      "year": "",
+      "type": "movie",
+      "status": "planned",
+      "cover": "https://posterhouse.org/wp-content/uploads/2021/05/silence_of_the_lambs_0-600x885.jpg",
+      "genres": [],
+      "rating": 1,
+      "notes": "",
+      "vibes": [],
+      "userId": "bea@gmail.com",
+      "id": 11
     }
   ],
   "lists": [
     {
       "id": 1,
-      "name": "Summer Reads",
+      "userId": "_demo",
+      "name": "Cozy Autumn Reads",
+      "description": "Books for rainy days and warm blankets.",
       "itemIds": [
-        2
+        1,
+        3
       ]
     },
     {
-      "name": "hola hola",
+      "id": 2,
+      "userId": "_demo",
+      "name": "2025 Watchlist",
+      "description": "Everything I want to get through this year.",
       "itemIds": [
-        2
+        2,
+        5
+      ]
+    },
+    {
+      "name": "lista de bea",
+      "description": "afgfg",
+      "itemIds": [
+        9
       ],
-      "id": 2
+      "userId": "bea@gmail.com",
+      "id": 3
+    },
+    {
+      "name": "lista lola",
+      "description": "sfdhsdf",
+      "itemIds": [
+        10
+      ],
+      "userId": "lola@gmail.com",
+      "id": 4
+    },
+    {
+      "name": "lista de pelis de bea",
+      "description": "",
+      "itemIds": [
+        11
+      ],
+      "userId": "bea@gmail.com",
+      "id": 5
     }
   ]
 }

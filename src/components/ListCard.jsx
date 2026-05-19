@@ -1,26 +1,87 @@
 import { Link } from 'react-router-dom';
 import { useLibrary } from '../context/LibraryContext';
+import MediaCover from './MediaCover';
 
-function ListCard({ list }) {
-  const { deleteList } = useLibrary();
+export default function ListCard({ list }) {
+  const { items, deleteList } = useLibrary();
+  const listItems = items.filter(i => list.itemIds?.includes(i.id));
+  const preview = listItems.slice(0, 3);
+  const extra = listItems.length - 3;
+
+  const handleDelete = async () => {
+    if (window.confirm(`Delete list "${list.name}"?`)) {
+      await deleteList(list.id);
+    }
+  };
 
   return (
     <div style={{
-      border: '1px solid #e2e8f0',
-      borderRadius: '8px',
-      padding: '16px',
-      marginBottom: '12px'
-    }}>
-      <h3 style={{ margin: '0 0 8px' }}>{list.name}</h3>
-      <p style={{ color: '#718096', margin: '0 0 12px' }}>
-        {list.itemIds.length} item{list.itemIds.length !== 1 ? 's' : ''}
-      </p>
-      <div style={{ display: 'flex', gap: '8px' }}>
-        <Link to={`/lists/${list.id}`}><button>View</button></Link>
-        <button onClick={() => deleteList(list.id)} style={{ color: 'red' }}>Delete</button>
+      background: 'white',
+      borderRadius: 'var(--radius-lg)',
+      padding: '20px',
+      border: '1px solid var(--border-light)',
+      boxShadow: 'var(--shadow-sm)',
+      transition: 'box-shadow 0.2s',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 12,
+    }}
+      onMouseEnter={e => e.currentTarget.style.boxShadow = 'var(--shadow-md)'}
+      onMouseLeave={e => e.currentTarget.style.boxShadow = 'var(--shadow-sm)'}
+    >
+      <div style={{
+        width: 40,
+        height: 40,
+        borderRadius: 10,
+        background: 'var(--bg)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent-light)' }}>List</span>
+      </div>
+
+      <div style={{ flex: 1 }}>
+        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 17, marginBottom: 4 }}>{list.name}</h3>
+        {list.description && <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{list.description}</p>}
+      </div>
+
+      <div style={{ display: 'flex', gap: 4, minHeight: 44 }}>
+        {preview.map(item => (
+          <div key={item.id} style={{ width: 44, flexShrink: 0 }}>
+            <MediaCover item={item} square />
+          </div>
+        ))}
+        {preview.length === 0 && (
+          <div style={{ width: 44, flexShrink: 0 }}>
+            <MediaCover type="list" title={list.name} square />
+          </div>
+        )}
+        {extra > 0 && (
+          <div style={{ width: 44, height: 44, borderRadius: 6, background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: 'var(--text-secondary)', fontWeight: 600 }}>
+            +{extra}
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+        <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
+          {list.itemIds?.length || 0} item{list.itemIds?.length !== 1 ? 's' : ''}
+        </span>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <button onClick={handleDelete} style={{ fontSize: 12, color: 'var(--text-muted)', cursor: 'pointer' }}>Delete</button>
+          <Link to={`/lists/${list.id}`} style={{
+            fontSize: 13,
+            fontWeight: 600,
+            color: 'var(--accent)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+          }}>
+            View
+          </Link>
+        </div>
       </div>
     </div>
   );
 }
-
-export default ListCard;
