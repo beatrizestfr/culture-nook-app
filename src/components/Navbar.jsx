@@ -14,6 +14,14 @@ function Navbar() {
       </span>
       <Link to="/" style={{ color: '#a0aec0', textDecoration: 'none' }}>Library</Link>
       <Link to="/lists" style={{ color: '#a0aec0', textDecoration: 'none' }}>Lists</Link>
+      <Link to="/edit/new" style={{
+        color: 'white',
+        textDecoration: 'none',
+        background: '#e94560',
+        padding: '6px 14px',
+        borderRadius: '6px',
+        fontWeight: 'bold'
+      }}>+ Add Item</Link>
     </nav>
   );
 }

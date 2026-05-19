@@ -51,8 +51,23 @@ export function LibraryProvider({ children }) {
     setLists(prev => [...prev, saved]);
   };
 
+  const updateList = async (id, updated) => {
+  const res = await fetch(`http://localhost:3001/lists/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updated)
+  });
+  const saved = await res.json();
+  setLists(prev => prev.map(l => l.id === id ? saved : l));
+};
+
+const deleteList = async (id) => {
+  await fetch(`http://localhost:3001/lists/${id}`, { method: 'DELETE' });
+  setLists(prev => prev.filter(l => l.id !== id));
+};
+
   return (
-    <LibraryContext.Provider value={{ items, lists, addItem, updateItem, deleteItem, addList }}>
+    <LibraryContext.Provider value={{ items, lists, addItem, updateItem, deleteItem, addList, updateList, deleteList }}>
       {children}
     </LibraryContext.Provider>
   );

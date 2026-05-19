@@ -1,39 +1,56 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useLibrary } from '../context/LibraryContext';
 import ItemCard from '../components/ItemCard';
+import AddItemForm from '../components/AddItemForm';
 
 function LibraryPage() {
-  const { items } = useLibrary();
+  const { items, addItem } = useLibrary();
+  const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filterType, setFilterType] = useState('all');
 
-  const visible = items.filter(item => {
-    const matchSearch = item.title.toLowerCase().includes(search.toLowerCase());
-    const matchFilter = filter === 'all' || item.type === filter;
-    return matchSearch && matchFilter;
+  const handleAdd = async (data) => {
+    await addItem(data);
+    setShowForm(false);
+  };
+
+  const filtered = items.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase());
+    const matchesType = filterType === 'all' || item.type === filterType;
+    return matchesSearch && matchesType;
   });
 
   return (
     <div>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '16px'
-      }}>
-        <h1>My Library</h1>
-        <Link to="/edit/new"><button>+ Add Item</button></Link>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <h1 style={{ margin: 0 }}>My Library</h1>
+        <button
+          onClick={() => setShowForm(!showForm)}
+          style={{ background: '#1a1a2e', color: 'white', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
+        >
+          {showForm ? 'Cancel' : '+ Add Item'}
+        </button>
       </div>
 
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+      {showForm && (
+        <div style={{ background: '#f7fafc', padding: '20px', borderRadius: '8px', marginBottom: '24px' }}>
+          <h2 style={{ marginTop: 0 }}>Add New Item</h2>
+          <AddItemForm onSubmit={handleAdd} buttonLabel="Add to Library" />
+        </div>
+      )}
+
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
         <input
-          placeholder="Search..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          style={{ padding: '8px', border: '1px solid #e2e8f0', borderRadius: '6px', flex: 1 }}
+          placeholder="Search by title..."
+          style={{ flex: 1, minWidth: '200px', padding: '8px', borderRadius: '6px', border: '1px solid #e2e8f0' }}
         />
-        <select value={filter} onChange={e => setFilter(e.target.value)}>
+        <select
+          value={filterType}
+          onChange={e => setFilterType(e.target.value)}
+          style={{ padding: '8px', borderRadius: '6px', border: '1px solid #e2e8f0' }}
+        >
           <option value="all">All types</option>
           <option value="movie">Movies</option>
           <option value="book">Books</option>
@@ -41,9 +58,11 @@ function LibraryPage() {
         </select>
       </div>
 
-      {visible.map(item => (
-        <ItemCard key={item.id} item={item} />
-      ))}
+      {filtered.length === 0 ? (
+        <p style={{ color: '#718096' }}>No items found.</p>
+      ) : (
+        filtered.map(item => <ItemCard key={item.id} item={item} />)
+      )}
     </div>
   );
 }

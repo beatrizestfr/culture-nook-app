@@ -15,6 +15,14 @@
       "status": "in-progress",
       "rating": 4,
       "notes": "Epic world building"
+    },
+    {
+      "title": "probando probando ",
+      "type": "movie",
+      "status": "done",
+      "rating": "2",
+      "notes": "jadflakjsfd",
+      "id": 3
     }
   ],
   "lists": [
@@ -24,6 +32,13 @@
       "itemIds": [
         2
       ]
+    },
+    {
+      "name": "hola hola",
+      "itemIds": [
+        2
+      ],
+      "id": 2
     }
   ]
 }

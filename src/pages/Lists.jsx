@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useLibrary } from '../context/LibraryContext';
+import ListCard from '../components/ListCard';
 
 function ListsPage() {
   const { lists, addList } = useLibrary();
@@ -27,17 +27,10 @@ function ListsPage() {
         <button type="submit">Create</button>
       </form>
 
+      {lists.length === 0 && <p style={{ color: '#718096' }}>No lists yet. Create one above!</p>}
+
       {lists.map(list => (
-        <div key={list.id} style={{
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          padding: '12px',
-          marginBottom: '12px'
-        }}>
-          <h3>{list.name}</h3>
-          <p style={{ color: '#718096' }}>{list.itemIds.length} items</p>
-          <Link to={`/lists/${list.id}`}><button>View List</button></Link>
-        </div>
+        <ListCard key={list.id} list={list} />
       ))}
     </div>
   );
