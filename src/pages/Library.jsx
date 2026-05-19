@@ -3,7 +3,7 @@ import { useLibrary } from '../context/LibraryContext';
 import ItemCard from '../components/ItemCard';
 
 const FORMATS = ['All', 'Movies', 'Books', 'Albums'];
-const GENRES = ['All', 'Romance', 'Horror', 'Indie', 'Sci-Fi', 'Drama', 'Documentary', 'Fantasy', 'Thriller', 'Comedy'];
+const GENRES = ['All', 'Romance', 'Horror', 'Indie', 'Sci-Fi', 'Drama', 'Documentary', 'Fantasy', 'Thriller', 'Comedy', 'Mystery', 'Biography', 'Historical'];
 const STATUSES = ['All', 'Planned', 'In Progress', 'Done'];
 
 export default function LibraryPage() {
