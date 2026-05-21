@@ -34,6 +34,7 @@ export default function ListDetailPage() {
     if (!selectedItemId) return;
 
     const itemId = Number(selectedItemId);
+    // Spread copies the list and itemIds before I add the new item.
     await updateList(list.id, { ...list, itemIds: [...listItemIds, itemId] });
     setSelectedItemId('');
   }
@@ -108,6 +109,7 @@ export default function ListDetailPage() {
                 <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 16, marginTop: 8 }}>{item.title}</h3>
                 <p style={{ color: 'var(--text-secondary)', fontSize: 13 }}>{item.type} - Rating: {item.rating || 0}/5</p>
               </Link>
+              {/* This button is outside the Link, so its click only removes the item. */}
               <button className="btn-secondary" onClick={() => handleRemoveItem(item.id)} style={{ marginTop: 8 }}>Remove</button>
             </div>
           ))}

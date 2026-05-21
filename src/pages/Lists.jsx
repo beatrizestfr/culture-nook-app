@@ -102,6 +102,8 @@ export default function ListsPage() {
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 18 }}>
+          {/* .map() creates one ListCard for each list in the array. */}
+          {/* key helps React identify each list card. */}
           {lists.map((list, index) => <ListCard key={list.id} list={list} index={index} />)}
         </div>
       )}

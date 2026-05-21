@@ -69,7 +69,9 @@ export default function ListCard({ list }) {
           {list.itemIds?.length || 0} item{list.itemIds?.length !== 1 ? 's' : ''}
         </span>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          {/* This click deletes the list instead of opening the View link. */}
           <button onClick={handleDelete} style={{ fontSize: 12, color: 'var(--text-muted)', cursor: 'pointer' }}>Delete</button>
+          {/* Link changes pages inside the React app without reloading. */}
           <Link to={`/lists/${list.id}`} style={{
             fontSize: 13,
             fontWeight: 600,

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
+// This is where the parent passes values and functions into this form.
 function AddItemForm({ onSubmit, initialData = {}, buttonLabel = 'Save' }) {
+  // useState stores text that can change on the screen.
   const [title, setTitle] = useState(initialData.title || '');
   const [type, setType] = useState(initialData.type || 'movie');
   const [status, setStatus] = useState(initialData.status || 'planned');
@@ -8,6 +10,7 @@ function AddItemForm({ onSubmit, initialData = {}, buttonLabel = 'Save' }) {
   const [notes, setNotes] = useState(initialData.notes || '');
 
   const handleSubmit = (e) => {
+    // e is the submit event; this stops the page from refreshing.
     e.preventDefault();
     if (!title.trim()) {
       alert('Please enter a title.');
@@ -16,10 +19,13 @@ function AddItemForm({ onSubmit, initialData = {}, buttonLabel = 'Save' }) {
     onSubmit({ title, type, status, rating: Number(rating), notes });
   };
 
+  // I pass the function to React here; handleSubmit() would run right away.
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: '500px' }}>
       <div style={{ marginBottom: '12px' }}>
         <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>Title</label>
+        {/* React controls this input with the title state. */}
+        {/* This runs when I type, and target.value is the typed text. */}
         <input
           value={title}
           onChange={e => setTitle(e.target.value)}

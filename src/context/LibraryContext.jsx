@@ -7,6 +7,7 @@ function getUserId(email) {
   return email.trim().toLowerCase();
 }
 
+// I export this so the rest of the app can wrap itself in the shared context.
 export function LibraryProvider({ children }) {
   const [items, setItems] = useState([]);
   const [lists, setLists] = useState([]);
@@ -18,7 +19,9 @@ export function LibraryProvider({ children }) {
   });
 
   useEffect(() => {
+    // useEffect runs after render; here I reload data when the user changes.
     async function loadData() {
+      // !user means "if there is no user".
       if (!user) {
         setItems([]);
         setLists([]);
@@ -56,6 +59,7 @@ export function LibraryProvider({ children }) {
   function login(email, name = '') {
     const cleanEmail = email.trim().toLowerCase();
     const displayName = name.trim() || cleanEmail.split('@')[0];
+    // This object keeps related user values together as key/value pairs.
     const currentUser = {
       id: getUserId(cleanEmail),
       email: cleanEmail,
@@ -107,6 +111,7 @@ export function LibraryProvider({ children }) {
     if (!oldItem || oldItem.userId !== user.id) throw new Error('Item not found');
 
     const itemToSave = {
+      // Spread copies the old item data before I replace some parts.
       ...oldItem,
       ...updatedItem,
       userId: user.id,
@@ -138,6 +143,7 @@ export function LibraryProvider({ children }) {
 
     setItems(prevItems => prevItems.filter(item => item.id !== id));
     setLists(prevLists => prevLists.map(list => ({
+      // Spread copies the list, then itemIds gets changed.
       ...list,
       itemIds: (list.itemIds || []).filter(itemId => itemId !== id),
     })));

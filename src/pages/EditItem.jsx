@@ -12,6 +12,7 @@ export default function EditItemPage() {
   const { items, addItem, updateItem } = useLibrary();
   const navigate = useNavigate();
 
+  // I keep all the form fields together in one state object.
   const [form, setForm] = useState({ title: '', creator: '', year: '', type: 'movie', status: 'planned', cover: '', genres: [], rating: 3, notes: '', vibes: [] });
   const [vibeInput, setVibeInput] = useState('');
 
@@ -22,6 +23,7 @@ export default function EditItemPage() {
     }
   }, [id, items, isNew]);
 
+  // Spread copies the old form, then I change only one field.
   const set = (key, val) => setForm(p => ({ ...p, [key]: val }));
 
   const toggleGenre = (g) => {

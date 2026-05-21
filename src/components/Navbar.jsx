@@ -2,9 +2,13 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLibrary } from '../context/LibraryContext';
 
+// I export this so App can import and show the Navbar.
+// Navbar has no props because it gets what it needs inside the component.
 export default function Navbar() {
+  // Destructuring takes user and logout out of the library object.
   const { user, logout } = useLibrary();
   const location = useLocation();
+  // useState stores whether the profile menu is open or closed.
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navLink = (to, label) => {
@@ -35,6 +39,7 @@ export default function Navbar() {
         height: 60, gap: 32
       }}>
         {/* Logo */}
+        {/* Link moves inside the app without a full page reload. */}
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 700, color: 'var(--text-primary)' }}>
             My Culture<em>Nook</em>
@@ -55,6 +60,7 @@ export default function Navbar() {
 
           {/* Avatar / menu */}
           <div style={{ position: 'relative' }}>
+            {/* This arrow function runs on click; ! flips open/closed. */}
             <button onClick={() => setMenuOpen(o => !o)} style={{
               width: 36, height: 36, borderRadius: '50%',
               background: 'var(--accent)', color: 'white',
@@ -62,9 +68,11 @@ export default function Navbar() {
               alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', border: 'none'
             }}>
+              {/* ?. avoids an error if user is not loaded yet. */}
               {user?.initials || 'U'}
             </button>
 
+            {/* This is a short if/else style check inside JSX. */}
             {menuOpen && (
               <div style={{
                 position: 'absolute', right: 0, top: 46,
@@ -74,6 +82,7 @@ export default function Navbar() {
                 overflow: 'hidden', zIndex: 200
               }}>
                 <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-light)' }}>
+                  {/* user?.name means "only read name if user exists". */}
                   <p style={{ fontSize: 13, fontWeight: 600 }}>{user?.name || 'My Profile'}</p>
                   <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{user?.email}</p>
                 </div>

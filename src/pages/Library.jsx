@@ -15,6 +15,7 @@ export default function LibraryPage() {
 
   const filtered = items.filter(item => {
     const q = search.toLowerCase();
+    // !q means there is no search text, so everything can match.
     const matchSearch = !q || item.title?.toLowerCase().includes(q) || item.creator?.toLowerCase().includes(q);
     const matchFormat = format === 'All' || item.type === format.toLowerCase().replace('albums', 'music').replace('movies', 'movie').replace('books', 'book');
     const matchGenre = genre === 'All' || item.genres?.includes(genre);
@@ -28,6 +29,7 @@ export default function LibraryPage() {
         {label}
       </span>
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {/* .map() makes one button for each option in the array. */}
         {options.map(o => (
           <button key={o} onClick={() => onChange(o)} className={`filter-pill ${value === o ? 'active' : ''}`}>
             {o}
@@ -52,6 +54,8 @@ export default function LibraryPage() {
         </div>
         {/* Search */}
         <div style={{ position: 'relative', minWidth: 260 }}>
+          {/* React controls this input with the search state. */}
+          {/* This handler saves the text I type into search. */}
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -80,6 +84,7 @@ export default function LibraryPage() {
       )}
 
       {/* Grid */}
+      {/* Braces let me use this short if/else inside JSX. */}
       {loading ? (
         <p style={{ color: 'var(--text-secondary)' }}>Loading your library...</p>
       ) : filtered.length === 0 ? (
@@ -89,6 +94,8 @@ export default function LibraryPage() {
         </div>
       ) : (
         <div className="card-grid">
+          {/* .map() repeats ItemCard for each item; => is the short function. */}
+          {/* key helps React tell the cards apart. */}
           {filtered.map(item => <ItemCard key={item.id} item={item} />)}
         </div>
       )}
