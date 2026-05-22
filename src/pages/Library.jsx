@@ -4,14 +4,12 @@ import ItemCard from '../components/ItemCard';
 
 const FORMATS = ['All', 'Movies', 'Books', 'Albums'];
 const GENRES = ['All', 'Romance', 'Horror', 'Indie', 'Sci-Fi', 'Drama', 'Documentary', 'Fantasy', 'Thriller', 'Comedy', 'Mystery', 'Biography', 'Historical'];
-const STATUSES = ['All', 'Planned', 'In Progress', 'Done'];
 
 export default function LibraryPage() {
   const { items, loading, error } = useLibrary();
   const [search, setSearch] = useState('');
   const [format, setFormat] = useState('All');
   const [genre, setGenre] = useState('All');
-  const [status, setStatus] = useState('All');
 
   const filtered = items.filter(item => {
     const q = search.toLowerCase();
@@ -19,8 +17,7 @@ export default function LibraryPage() {
     const matchSearch = !q || item.title?.toLowerCase().includes(q) || item.creator?.toLowerCase().includes(q);
     const matchFormat = format === 'All' || item.type === format.toLowerCase().replace('albums', 'music').replace('movies', 'movie').replace('books', 'book');
     const matchGenre = genre === 'All' || item.genres?.includes(genre);
-    const matchStatus = status === 'All' || item.status === status.toLowerCase().replace(' ', '-');
-    return matchSearch && matchFormat && matchGenre && matchStatus;
+    return matchSearch && matchFormat && matchGenre;
   });
 
   const FilterRow = ({ label, options, value, onChange }) => (
@@ -69,7 +66,6 @@ export default function LibraryPage() {
       <div style={{ marginBottom: 24, padding: '16px 0', borderBottom: '1px solid var(--border-light)' }}>
         <FilterRow label="Format" options={FORMATS} value={format} onChange={setFormat} />
         <FilterRow label="Genre" options={GENRES} value={genre} onChange={setGenre} />
-        <FilterRow label="Status" options={STATUSES} value={status} onChange={setStatus} />
       </div>
 
       {/* Count + sort */}

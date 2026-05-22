@@ -29,18 +29,6 @@ export default function ListCard({ list }) {
       onMouseEnter={e => e.currentTarget.style.boxShadow = 'var(--shadow-md)'}
       onMouseLeave={e => e.currentTarget.style.boxShadow = 'var(--shadow-sm)'}
     >
-      <div style={{
-        width: 40,
-        height: 40,
-        borderRadius: 10,
-        background: 'var(--bg)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent-light)' }}>List</span>
-      </div>
-
       <div style={{ flex: 1 }}>
         <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 17, marginBottom: 4 }}>{list.name}</h3>
         {list.description && <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{list.description}</p>}

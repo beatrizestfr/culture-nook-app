@@ -9,6 +9,7 @@ export default function ItemDetailPage() {
   const { items, deleteItem, loading } = useLibrary();
   const navigate = useNavigate();
   const item = items.find(i => i.id === Number(id));
+  const rating = Number(item?.rating) || 0;
 
   if (loading) return <p style={{ padding: 40, color: 'var(--text-secondary)' }}>Loading item...</p>;
   if (!item) return <p style={{ padding: 40, color: 'var(--text-secondary)' }}>Item not found for the current account.</p>;
@@ -19,8 +20,6 @@ export default function ItemDetailPage() {
       navigate('/');
     }
   };
-
-  const statusClass = item.status === 'done' ? 'status-done' : item.status === 'in-progress' ? 'status-progress' : 'status-planned';
 
   return (
     <div>
@@ -36,8 +35,11 @@ export default function ItemDetailPage() {
 
           <div style={{ background: 'white', borderRadius: 'var(--radius-md)', padding: '16px', marginBottom: 12, textAlign: 'center', border: '1px solid var(--border-light)' }}>
             <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1, color: 'var(--text-muted)', marginBottom: 8, fontWeight: 600 }}>Your Rating</p>
+            <p className="stars" aria-label={`${rating} star rating`} style={{ fontSize: 20 }}>
+              {'\u2605'.repeat(rating)}<span className="stars-empty">{'\u2606'.repeat(5 - rating)}</span>
+            </p>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>
-              {item.rating} out of 5 - {RATING_LABELS[item.rating] || ''}
+              {RATING_LABELS[item.rating] || ''}
             </p>
           </div>
 
@@ -51,7 +53,6 @@ export default function ItemDetailPage() {
                     {item.type}
                   </td>
                 </tr>
-                <tr><td style={{ color: 'var(--text-muted)', paddingBottom: 8 }}>Status</td><td style={{ textAlign: 'right' }}><span className={`status-badge ${statusClass}`}>{item.status}</span></td></tr>
                 {item.year && <tr><td style={{ color: 'var(--text-muted)', paddingBottom: 8 }}>Year</td><td style={{ textAlign: 'right', fontWeight: 500 }}>{item.year}</td></tr>}
               </tbody>
             </table>

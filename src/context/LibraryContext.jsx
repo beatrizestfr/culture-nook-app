@@ -91,6 +91,7 @@ export function LibraryProvider({ children }) {
       genres: newItem.genres || [],
       vibes: newItem.vibes || [],
     };
+    delete itemToSave.status;
 
     const response = await fetch(`${API_URL}/items`, {
       method: 'POST',
@@ -120,6 +121,7 @@ export function LibraryProvider({ children }) {
       genres: updatedItem.genres || [],
       vibes: updatedItem.vibes || [],
     };
+    delete itemToSave.status;
 
     const response = await fetch(`${API_URL}/items/${id}`, {
       method: 'PUT',

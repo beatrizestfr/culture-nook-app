@@ -5,6 +5,7 @@ import MediaCover from '../components/MediaCover';
 
 const GENRES = ['Drama', 'Mystery', 'Romance', 'Horror', 'Indie', 'Sci-Fi', 'Documentary', 'Fantasy', 'Thriller', 'Comedy', 'Biography', 'Historical'];
 const RATING_LABELS = ['', 'Not for me', 'It was ok', 'Liked it', 'Loved it', 'Masterpiece'];
+const RATINGS = [1, 2, 3, 4, 5];
 
 export default function EditItemPage() {
   const { id } = useParams();
@@ -13,7 +14,7 @@ export default function EditItemPage() {
   const navigate = useNavigate();
 
   // I keep all the form fields together in one state object.
-  const [form, setForm] = useState({ title: '', creator: '', year: '', type: 'movie', status: 'planned', cover: '', genres: [], rating: 3, notes: '', vibes: [] });
+  const [form, setForm] = useState({ title: '', creator: '', year: '', type: 'movie', cover: '', genres: [], rating: 3, notes: '', vibes: [] });
   const [vibeInput, setVibeInput] = useState('');
 
   useEffect(() => {
@@ -97,14 +98,6 @@ export default function EditItemPage() {
                 <option value="music">Album</option>
               </select>
             </div>
-            <div>
-              {label('Status')}
-              <select value={form.status} onChange={e => set('status', e.target.value)}>
-                <option value="planned">Planned</option>
-                <option value="in-progress">In Progress</option>
-                <option value="done">Done</option>
-              </select>
-            </div>
           </div>
 
           <div style={{ marginBottom: 16 }}>
@@ -131,11 +124,20 @@ export default function EditItemPage() {
 
           <div style={{ marginBottom: 20 }}>
             {label('Your Rating')}
-            <select value={form.rating} onChange={e => set('rating', Number(e.target.value))}>
-              {[1, 2, 3, 4, 5].map(value => (
-                <option key={value} value={value}>{value} / 5 - {RATING_LABELS[value]}</option>
+            <div className="star-picker">
+              {RATINGS.map(value => (
+                <button
+                  key={value}
+                  type="button"
+                  className={`star-button ${value <= form.rating ? 'star-selected' : ''}`}
+                  onClick={() => set('rating', value)}
+                  aria-label={`${value} star rating`}
+                >
+                  {value <= form.rating ? '\u2605' : '\u2606'}
+                </button>
               ))}
-            </select>
+            </div>
+            <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 6 }}>{RATING_LABELS[form.rating]}</p>
           </div>
 
           <div style={{ marginBottom: 20 }}>
@@ -185,7 +187,9 @@ export default function EditItemPage() {
               {form.genres?.slice(0, 3).map(g => <span key={g} className="tag" style={{ fontSize: 11 }}>{g}</span>)}
               {form.vibes?.slice(0, 1).map(v => <span key={v} className="tag tag-vibe" style={{ fontSize: 11 }}>{v}</span>)}
             </div>
-            <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Rating: {form.rating}/5</p>
+            <p className="stars" aria-label={`${form.rating} star rating`}>
+              {'\u2605'.repeat(form.rating)}<span className="stars-empty">{'\u2606'.repeat(5 - form.rating)}</span>
+            </p>
           </div>
           {form.vibes?.length > 0 && (
             <div style={{ marginTop: 16, padding: '12px 14px', border: '1px dashed var(--border)', borderRadius: 'var(--radius-md)', fontSize: 13, color: 'var(--text-secondary)' }}>

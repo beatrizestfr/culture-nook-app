@@ -107,7 +107,10 @@ export default function ListDetailPage() {
               <Link to={`/items/${item.id}`}>
                 <MediaCover item={item} />
                 <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 16, marginTop: 8 }}>{item.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: 13 }}>{item.type} - Rating: {item.rating || 0}/5</p>
+                <p style={{ color: 'var(--text-secondary)', fontSize: 13 }}>{item.type}</p>
+                <p className="stars" aria-label={`${item.rating || 0} star rating`}>
+                  {'\u2605'.repeat(item.rating || 0)}<span className="stars-empty">{'\u2606'.repeat(5 - (item.rating || 0))}</span>
+                </p>
               </Link>
               {/* This button is outside the Link, so its click only removes the item. */}
               <button className="btn-secondary" onClick={() => handleRemoveItem(item.id)} style={{ marginTop: 8 }}>Remove</button>

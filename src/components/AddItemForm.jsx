@@ -5,9 +5,9 @@ function AddItemForm({ onSubmit, initialData = {}, buttonLabel = 'Save' }) {
   // useState stores text that can change on the screen.
   const [title, setTitle] = useState(initialData.title || '');
   const [type, setType] = useState(initialData.type || 'movie');
-  const [status, setStatus] = useState(initialData.status || 'planned');
   const [rating, setRating] = useState(initialData.rating || 1);
   const [notes, setNotes] = useState(initialData.notes || '');
+  const ratings = [1, 2, 3, 4, 5];
 
   const handleSubmit = (e) => {
     // e is the submit event; this stops the page from refreshing.
@@ -16,7 +16,7 @@ function AddItemForm({ onSubmit, initialData = {}, buttonLabel = 'Save' }) {
       alert('Please enter a title.');
       return;
     }
-    onSubmit({ title, type, status, rating: Number(rating), notes });
+    onSubmit({ title, type, rating: Number(rating), notes });
   };
 
   // I pass the function to React here; handleSubmit() would run right away.
@@ -48,30 +48,22 @@ function AddItemForm({ onSubmit, initialData = {}, buttonLabel = 'Save' }) {
       </div>
 
       <div style={{ marginBottom: '12px' }}>
-        <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>Status</label>
-        <select
-          value={status}
-          onChange={e => setStatus(e.target.value)}
-          style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #e2e8f0' }}
-        >
-          <option value="planned">Planned</option>
-          <option value="in-progress">In Progress</option>
-          <option value="done">Done</option>
-        </select>
-      </div>
-
-      <div style={{ marginBottom: '12px' }}>
         <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
-          Rating: {rating} / 5
+          Rating
         </label>
-        <input
-          type="range"
-          min="1"
-          max="5"
-          value={rating}
-          onChange={e => setRating(e.target.value)}
-          style={{ width: '100%' }}
-        />
+        <div className="star-picker">
+          {ratings.map(value => (
+            <button
+              key={value}
+              type="button"
+              className={`star-button ${value <= rating ? 'star-selected' : ''}`}
+              onClick={() => setRating(value)}
+              aria-label={`${value} star rating`}
+            >
+              {value <= rating ? '\u2605' : '\u2606'}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div style={{ marginBottom: '16px' }}>

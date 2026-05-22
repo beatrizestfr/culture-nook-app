@@ -15,12 +15,6 @@
   --tag-bg: #ede8e1;
   --tag-vibe-bg: #e8e2f5;
   --tag-vibe-text: #5a4d8a;
-  --status-done-bg: #d4edda;
-  --status-done-text: #1a6b35;
-  --status-progress-bg: #fff3cd;
-  --status-progress-text: #7a5a00;
-  --status-planned-bg: #e8e2f5;
-  --status-planned-text: #5a4d8a;
   --shadow-sm: 0 1px 3px rgba(44,36,22,0.07);
   --shadow-md: 0 4px 16px rgba(44,36,22,0.10);
   --shadow-lg: 0 8px 32px rgba(44,36,22,0.14);
@@ -130,21 +124,26 @@ input::placeholder, textarea::placeholder {
 }
 .tag-vibe::before { content: '+ '; }
 
-.status-badge {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 99px;
-  display: inline-block;
-}
-.status-done { background: var(--status-done-bg); color: var(--status-done-text); }
-.status-done::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: currentColor; margin-right: 6px; vertical-align: 1px; }
-.status-progress { background: var(--status-progress-bg); color: var(--status-progress-text); }
-.status-planned { background: var(--status-planned-bg); color: var(--status-planned-text); }
-
 /* Stars */
 .stars { color: #c8a86b; letter-spacing: 2px; font-size: 15px; }
 .stars-empty { color: var(--border); }
+.star-picker {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.star-button {
+  color: var(--border);
+  font-size: 28px;
+  line-height: 1;
+  padding: 2px;
+}
+.star-button.star-selected {
+  color: #c8a86b;
+}
+.star-button:hover {
+  color: #c8a86b;
+}
 
 /* Filter pills */
 .filter-pill {
