@@ -7,6 +7,7 @@ function AddItemForm({ onSubmit, initialData = {}, buttonLabel = 'Save' }) {
   const [type, setType] = useState(initialData.type || 'movie');
   const [rating, setRating] = useState(initialData.rating || 1);
   const [notes, setNotes] = useState(initialData.notes || '');
+  // These are the possible star values.
   const ratings = [1, 2, 3, 4, 5];
 
   const handleSubmit = (e) => {
@@ -52,6 +53,7 @@ function AddItemForm({ onSubmit, initialData = {}, buttonLabel = 'Save' }) {
           Rating
         </label>
         <div className="star-picker">
+          {/* Each star button stores its number in rating state. */}
           {ratings.map(value => (
             <button
               key={value}

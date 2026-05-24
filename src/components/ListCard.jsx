@@ -3,12 +3,15 @@ import { useLibrary } from '../context/LibraryContext';
 import MediaCover from './MediaCover';
 
 export default function ListCard({ list }) {
+  // I use context here so the card can show preview covers and delete itself.
   const { items, deleteList } = useLibrary();
+  // The list only stores ids, so I find the real item objects here.
   const listItems = items.filter(i => list.itemIds?.includes(i.id));
   const preview = listItems.slice(0, 3);
   const extra = listItems.length - 3;
 
   const handleDelete = async () => {
+    // I confirm first because deleting a list removes it from the API.
     if (window.confirm(`Delete list "${list.name}"?`)) {
       await deleteList(list.id);
     }
@@ -35,17 +38,20 @@ export default function ListCard({ list }) {
       </div>
 
       <div style={{ display: 'flex', gap: 4, minHeight: 44 }}>
+        {/* I show up to three item covers as a quick preview. */}
         {preview.map(item => (
           <div key={item.id} style={{ width: 44, flexShrink: 0 }}>
             <MediaCover item={item} square />
           </div>
         ))}
         {preview.length === 0 && (
+          // Empty lists still get a fallback cover block.
           <div style={{ width: 44, flexShrink: 0 }}>
             <MediaCover type="list" title={list.name} square />
           </div>
         )}
         {extra > 0 && (
+          // If there are more than three items, I show how many are hidden.
           <div style={{ width: 44, height: 44, borderRadius: 6, background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: 'var(--text-secondary)', fontWeight: 600 }}>
             +{extra}
           </div>

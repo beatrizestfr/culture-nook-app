@@ -6,7 +6,9 @@ const FORMATS = ['All', 'Movies', 'Books', 'Albums'];
 const GENRES = ['All', 'Romance', 'Horror', 'Indie', 'Sci-Fi', 'Drama', 'Documentary', 'Fantasy', 'Thriller', 'Comedy', 'Mystery', 'Biography', 'Historical'];
 
 export default function LibraryPage() {
+  // Items come from context after the current user is loaded.
   const { items, loading, error } = useLibrary();
+  // These states change the visible list without changing the database.
   const [search, setSearch] = useState('');
   const [format, setFormat] = useState('All');
   const [genre, setGenre] = useState('All');
@@ -15,11 +17,13 @@ export default function LibraryPage() {
     const q = search.toLowerCase();
     // !q means there is no search text, so everything can match.
     const matchSearch = !q || item.title?.toLowerCase().includes(q) || item.creator?.toLowerCase().includes(q);
+    // The labels are plural, but item.type is saved as movie/book/music.
     const matchFormat = format === 'All' || item.type === format.toLowerCase().replace('albums', 'music').replace('movies', 'movie').replace('books', 'book');
     const matchGenre = genre === 'All' || item.genres?.includes(genre);
     return matchSearch && matchFormat && matchGenre;
   });
 
+  // I made this small component so Format and Genre filters use the same layout.
   const FilterRow = ({ label, options, value, onChange }) => (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
       <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-muted)', minWidth: 56 }}>
@@ -46,7 +50,7 @@ export default function LibraryPage() {
             <em style={{ color: 'var(--accent-light)' }}>Library</em>
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 4 }}>
-            {items.length} items tracked · Last updated today
+            {items.length} items tracked - Last updated today
           </p>
         </div>
         {/* Search */}

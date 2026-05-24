@@ -4,6 +4,7 @@ import MediaCover from './MediaCover';
 // I export this so I can import ItemCard in another file.
 // The { item } part takes item out of the props object.
 export default function ItemCard({ item }) {
+  // I make sure rating is a number before making stars.
   const rating = Number(item.rating) || 0;
 
   return (
@@ -32,6 +33,7 @@ export default function ItemCard({ item }) {
           </div>
         )}
         <p className="stars" aria-label={`${rating} star rating`}>
+          {/* repeat makes the filled and empty stars from the rating number. */}
           {'\u2605'.repeat(rating)}<span className="stars-empty">{'\u2606'.repeat(5 - rating)}</span>
         </p>
       </div>

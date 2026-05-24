@@ -4,6 +4,7 @@ import { useLibrary } from '../context/LibraryContext';
 import MediaCover from '../components/MediaCover';
 
 export default function ListDetailPage() {
+  // The list id comes from /lists/:id.
   const { id } = useParams();
   const { lists, items, updateList, deleteList, loading } = useLibrary();
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function ListDetailPage() {
   const [renaming, setRenaming] = useState(false);
   const [newName, setNewName] = useState('');
 
+  // I find the list that matches the URL id.
   const list = lists.find(l => l.id === Number(id));
 
   if (loading) return <p style={{ padding: 40, color: 'var(--text-secondary)' }}>Loading list...</p>;
@@ -26,10 +28,13 @@ export default function ListDetailPage() {
   }
 
   const listItemIds = list.itemIds || [];
+  // Lists store ids, so I match those ids to the real item objects.
   const listItems = items.filter(item => listItemIds.includes(item.id));
+  // This keeps the dropdown from showing items already in the list.
   const availableItems = items.filter(item => !listItemIds.includes(item.id));
 
   async function handleAddItem(e) {
+    // The add-item form should update the list without refreshing.
     e.preventDefault();
     if (!selectedItemId) return;
 
@@ -40,10 +45,12 @@ export default function ListDetailPage() {
   }
 
   async function handleRemoveItem(itemId) {
+    // Removing means saving the same list without this item's id.
     await updateList(list.id, { ...list, itemIds: listItemIds.filter(id => id !== itemId) });
   }
 
   async function handleRename(e) {
+    // Rename is also a form, so I stop the page refresh here.
     e.preventDefault();
     if (!newName.trim()) return;
 
@@ -52,6 +59,7 @@ export default function ListDetailPage() {
   }
 
   async function handleDelete() {
+    // After deleting this list, I go back to the Lists page.
     if (window.confirm(`Delete list "${list.name}"?`)) {
       await deleteList(list.id);
       navigate('/lists');
@@ -88,6 +96,7 @@ export default function ListDetailPage() {
       <form onSubmit={handleAddItem} style={{ display: 'flex', gap: 10, marginBottom: 28 }}>
         <select value={selectedItemId} onChange={e => setSelectedItemId(e.target.value)}>
           <option value="">Choose an item to add</option>
+          {/* The select options come from items not already in the list. */}
           {availableItems.map(item => (
             <option key={item.id} value={item.id}>{item.title} ({item.type})</option>
           ))}
@@ -102,6 +111,7 @@ export default function ListDetailPage() {
         </div>
       ) : (
         <div className="card-grid">
+          {/* One small item card is created for each item in this list. */}
           {listItems.map(item => (
             <div key={item.id}>
               <Link to={`/items/${item.id}`}>

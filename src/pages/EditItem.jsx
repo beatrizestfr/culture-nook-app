@@ -8,7 +8,9 @@ const RATING_LABELS = ['', 'Not for me', 'It was ok', 'Liked it', 'Loved it', 'M
 const RATINGS = [1, 2, 3, 4, 5];
 
 export default function EditItemPage() {
+  // The id comes from the URL, for example /edit/100 or /edit/new.
   const { id } = useParams();
+  // "new" means I am adding an item instead of editing an old one.
   const isNew = id === 'new';
   const { items, addItem, updateItem } = useLibrary();
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ export default function EditItemPage() {
   const [vibeInput, setVibeInput] = useState('');
 
   useEffect(() => {
+    // When editing, I fill the form with the item that already exists.
     if (!isNew) {
       const found = items.find(i => i.id === parseInt(id));
       if (found) setForm({ genres: [], vibes: [], ...found });
@@ -28,6 +31,7 @@ export default function EditItemPage() {
   const set = (key, val) => setForm(p => ({ ...p, [key]: val }));
 
   const toggleGenre = (g) => {
+    // If the genre is already selected I remove it, otherwise I add it.
     setForm(p => ({
       ...p,
       genres: p.genres?.includes(g) ? p.genres.filter(x => x !== g) : [...(p.genres || []), g]
@@ -35,8 +39,10 @@ export default function EditItemPage() {
   };
 
   const addVibe = (e) => {
+    // This runs when I press Enter or click Add for a custom vibe.
     if ((e.key === 'Enter' || e.type === 'click') && vibeInput.trim()) {
       e.preventDefault();
+      // Optional chaining avoids an error if vibes is empty.
       if (!form.vibes?.includes(vibeInput.trim())) {
         set('vibes', [...(form.vibes || []), vibeInput.trim()]);
       }
@@ -45,8 +51,10 @@ export default function EditItemPage() {
   };
 
   const handleSubmit = async (e) => {
+    // I stop the browser refresh and let React handle saving.
     e.preventDefault();
     if (!form.title.trim()) return alert('Title is required');
+    // The same page handles both add and edit.
     if (isNew) await addItem(form);
     else await updateItem(parseInt(id), form);
     navigate('/');
@@ -125,6 +133,7 @@ export default function EditItemPage() {
           <div style={{ marginBottom: 20 }}>
             {label('Your Rating')}
             <div className="star-picker">
+              {/* Each star is a button that saves a number from 1 to 5. */}
               {RATINGS.map(value => (
                 <button
                   key={value}
@@ -156,6 +165,7 @@ export default function EditItemPage() {
               <button type="button" onClick={addVibe} className="btn-secondary">Add</button>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {/* Each vibe tag can remove itself from the form state. */}
               {form.vibes?.map(v => (
                 <span key={v} className="tag tag-vibe" style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                   {v}
@@ -176,6 +186,7 @@ export default function EditItemPage() {
           <div style={{ background: 'white', borderRadius: 'var(--radius-lg)', padding: 16, border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}>
             {/* Mini cover */}
             <div style={{ maxWidth: 180, marginBottom: 12 }}>
+              {/* I reuse MediaCover so the preview works like the real cards. */}
               <MediaCover item={form} />
             </div>
             <p style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.8, fontWeight: 600, marginBottom: 4 }}>
@@ -188,6 +199,7 @@ export default function EditItemPage() {
               {form.vibes?.slice(0, 1).map(v => <span key={v} className="tag tag-vibe" style={{ fontSize: 11 }}>{v}</span>)}
             </div>
             <p className="stars" aria-label={`${form.rating} star rating`}>
+              {/* repeat turns the number rating into filled and empty stars. */}
               {'\u2605'.repeat(form.rating)}<span className="stars-empty">{'\u2606'.repeat(5 - form.rating)}</span>
             </p>
           </div>

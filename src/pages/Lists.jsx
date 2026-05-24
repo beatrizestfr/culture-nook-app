@@ -4,27 +4,33 @@ import { useLibrary } from '../context/LibraryContext';
 import ListCard from '../components/ListCard';
 
 export default function ListsPage() {
+  // Lists and addList come from context because lists are shared app data.
   const { lists, addList, loading, error } = useLibrary();
   const navigate = useNavigate();
+  // This controls whether the create-list form is visible.
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [formError, setFormError] = useState('');
 
   const handleCreate = async (event) => {
+    // I stop the form from refreshing the page.
     event.preventDefault();
     const trimmedName = name.trim();
+    // A list needs a name, so I check that before saving.
     if (!trimmedName) {
       setFormError('List name is required.');
       return;
     }
 
     try {
+      // itemIds starts empty because the user adds items after creating the list.
       const saved = await addList({ name: trimmedName, description, itemIds: [] });
       setName('');
       setDescription('');
       setFormError('');
       setShowForm(false);
+      // After creating a list, I take the user to that list page.
       navigate(`/lists/${saved.id}`);
     } catch (err) {
       setFormError(err.message || 'Could not create the list.');
@@ -53,6 +59,7 @@ export default function ListsPage() {
         </div>
       )}
 
+      {/* This form only appears after clicking New list. */}
       {showForm && (
         <form onSubmit={handleCreate} style={{
           background: 'white',
@@ -67,6 +74,7 @@ export default function ListsPage() {
               <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6 }}>
                 List name
               </label>
+              {/* This is a controlled input for the list name. */}
               <input value={name} onChange={e => { setName(e.target.value); setFormError(''); }} placeholder="Weekend watchlist" autoFocus />
             </div>
             <div>

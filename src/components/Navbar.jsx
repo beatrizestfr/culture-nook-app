@@ -12,6 +12,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navLink = (to, label) => {
+    // I compare the current URL to the link so I can style the active page.
     const active = location.pathname === to || (to === '/' && location.pathname === '/');
     return (
       <Link to={to} style={{
@@ -87,6 +88,7 @@ export default function Navbar() {
                   <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{user?.email}</p>
                 </div>
                 <button onClick={() => { setMenuOpen(false); logout(); }} style={{
+                  // This closes the menu first, then logs the user out.
                   width: '100%', textAlign: 'left', padding: '11px 16px',
                   fontSize: 14, color: '#c0392b', cursor: 'pointer',
                   transition: 'background 0.15s', border: 'none', background: 'transparent'

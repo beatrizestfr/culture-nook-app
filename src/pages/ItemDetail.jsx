@@ -5,16 +5,20 @@ import MediaCover from '../components/MediaCover';
 const RATING_LABELS = { 1: 'Not for me', 2: 'It was ok', 3: 'Liked it', 4: 'Loved it', 5: 'Masterpiece' };
 
 export default function ItemDetailPage() {
+  // useParams reads the item id from /items/:id.
   const { id } = useParams();
   const { items, deleteItem, loading } = useLibrary();
   const navigate = useNavigate();
+  // I find the one item that matches the id in the URL.
   const item = items.find(i => i.id === Number(id));
   const rating = Number(item?.rating) || 0;
 
+  // These returns stop the page early while data is missing.
   if (loading) return <p style={{ padding: 40, color: 'var(--text-secondary)' }}>Loading item...</p>;
   if (!item) return <p style={{ padding: 40, color: 'var(--text-secondary)' }}>Item not found for the current account.</p>;
 
   const handleDelete = async () => {
+    // I ask first because deleting is permanent in the fake API.
     if (window.confirm(`Delete "${item.title}"?`)) {
       await deleteItem(item.id);
       navigate('/');
@@ -36,6 +40,7 @@ export default function ItemDetailPage() {
           <div style={{ background: 'white', borderRadius: 'var(--radius-md)', padding: '16px', marginBottom: 12, textAlign: 'center', border: '1px solid var(--border-light)' }}>
             <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1, color: 'var(--text-muted)', marginBottom: 8, fontWeight: 600 }}>Your Rating</p>
             <p className="stars" aria-label={`${rating} star rating`} style={{ fontSize: 20 }}>
+              {/* The stored number becomes stars on the screen here. */}
               {'\u2605'.repeat(rating)}<span className="stars-empty">{'\u2606'.repeat(5 - rating)}</span>
             </p>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>
@@ -62,6 +67,7 @@ export default function ItemDetailPage() {
             <div style={{ background: 'white', borderRadius: 'var(--radius-md)', padding: '16px', marginBottom: 16, border: '1px solid var(--border-light)' }}>
               <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1, color: 'var(--text-muted)', marginBottom: 10, fontWeight: 600 }}>Tags & Genres</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {/* These maps create one tag for each genre or vibe. */}
                 {item.genres?.map(g => <span key={g} className="tag">{g}</span>)}
                 {item.vibes?.map(v => <span key={v} className="tag tag-vibe">{v}</span>)}
               </div>

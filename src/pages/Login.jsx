@@ -7,15 +7,20 @@ const QUOTE = {
 };
 
 export default function LoginPage() {
+  // login comes from context, so this page can set the current user.
   const { login } = useLibrary();
+  // I use tab to switch between sign in and create account.
   const [tab, setTab] = useState('signin');
+  // These states make the form inputs controlled by React.
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
+    // preventDefault stops the form from refreshing the whole page.
     e.preventDefault();
+    // These checks give simple feedback before logging in.
     if (!email.trim()) { setError('Please enter your email.'); return; }
     if (!password.trim()) { setError('Please enter a password.'); return; }
     if (password.length < 6) { setError('Password must be at least 6 characters.'); return; }
@@ -68,6 +73,7 @@ export default function LoginPage() {
           borderRadius: 10, padding: 4, marginBottom: 36,
           border: '1px solid var(--border)'
         }}>
+          {/* This map creates the two tab buttons. */}
           {['signin', 'register'].map(t => (
             <button key={t} onClick={() => { setTab(t); setError(''); }} style={{
               flex: 1, padding: '9px 0', borderRadius: 8,
@@ -92,6 +98,7 @@ export default function LoginPage() {
         </p>
 
         <form onSubmit={handleSubmit}>
+          {/* The name field only appears when creating an account. */}
           {tab === 'register' && (
             <div style={{ marginBottom: 16 }}>
               <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 6 }}>
@@ -105,6 +112,7 @@ export default function LoginPage() {
             <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: 6 }}>
               Email Address
             </label>
+            {/* e.target.value is the text the user typed. */}
             <input type="email" value={email} onChange={e => { setEmail(e.target.value); setError(''); }} placeholder="you@example.com" />
           </div>
 
@@ -116,6 +124,7 @@ export default function LoginPage() {
             {tab === 'register' && <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>Minimum 6 characters</p>}
           </div>
 
+          {/* I only show the error paragraph when there is an error message. */}
           {error && <p style={{ color: '#c0392b', fontSize: 13, marginBottom: 12 }}>{error}</p>}
 
           <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '14px', fontSize: 15, marginTop: 16 }}>
