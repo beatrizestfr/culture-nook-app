@@ -1,36 +1,30 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLibrary } from '../context/LibraryContext';
+import { useLibrary } from '../store/LibraryContext';
 import ListCard from '../components/ListCard';
 
 export default function ListsPage() {
-  // Lists and addList come from context because lists are shared app data.
   const { lists, addList, loading, error } = useLibrary();
   const navigate = useNavigate();
-  // This controls whether the create-list form is visible.
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [formError, setFormError] = useState('');
 
   const handleCreate = async (event) => {
-    // I stop the form from refreshing the page.
     event.preventDefault();
     const trimmedName = name.trim();
-    // A list needs a name, so I check that before saving.
     if (!trimmedName) {
       setFormError('List name is required.');
       return;
     }
 
     try {
-      // itemIds starts empty because the user adds items after creating the list.
       const saved = await addList({ name: trimmedName, description, itemIds: [] });
       setName('');
       setDescription('');
       setFormError('');
       setShowForm(false);
-      // After creating a list, I take the user to that list page.
       navigate(`/lists/${saved.id}`);
     } catch (err) {
       setFormError(err.message || 'Could not create the list.');
@@ -39,80 +33,90 @@ export default function ListsPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, marginBottom: 28, flexWrap: 'wrap' }}>
+      <div className="d-flex justify-content-between align-items-start gap-3 mb-4 flex-wrap">
         <div>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 36 }}>
+          <h1 className="page-title">
             Your <em style={{ color: 'var(--accent-light)' }}>Lists</em>
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 4 }}>
+          <p className="text-secondary mt-1" style={{ fontSize: 14 }}>
             {lists.length} personal list{lists.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <button className="btn-primary" onClick={() => setShowForm(true)}>
+        <button className="btn btn-primary" onClick={() => setShowForm(true)}>
           New list
         </button>
       </div>
 
-      {error && (
-        <div style={{ background: '#fdf0ef', border: '1px solid #f1c0bb', color: '#9d2c20', borderRadius: 'var(--radius-md)', padding: 14, marginBottom: 20 }}>
-          {error}
-        </div>
-      )}
+      {error && <div className="alert alert-danger mb-4">{error}</div>}
 
-      {/* This form only appears after clicking New list. */}
+      {/* Create list form — shown only after clicking "New list" */}
       {showForm && (
-        <form onSubmit={handleCreate} style={{
-          background: 'white',
-          border: '1px solid var(--border-light)',
-          borderRadius: 'var(--radius-lg)',
-          padding: 20,
-          boxShadow: 'var(--shadow-sm)',
-          marginBottom: 24,
-        }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(220px, 1fr) minmax(260px, 2fr)', gap: 14 }}>
-            <div>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6 }}>
-                List name
-              </label>
-              {/* This is a controlled input for the list name. */}
-              <input value={name} onChange={e => { setName(e.target.value); setFormError(''); }} placeholder="Weekend watchlist" autoFocus />
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6 }}>
-                Description
-              </label>
-              <input value={description} onChange={e => setDescription(e.target.value)} placeholder="Optional note for this collection" />
-            </div>
+        <div className="card mb-4">
+          <div className="card-body">
+            <form onSubmit={handleCreate} noValidate>
+              <div className="row g-3">
+                <div className="col-12 col-sm-5">
+                  <label htmlFor="list-name" className="field-label">
+                    List name <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="list-name"
+                    type="text"
+                    className="form-control"
+                    value={name}
+                    required
+                    onChange={e => { setName(e.target.value); setFormError(''); }}
+                    placeholder="Weekend watchlist"
+                    autoFocus
+                  />
+                </div>
+                <div className="col-12 col-sm-7">
+                  <label htmlFor="list-description" className="field-label">Description</label>
+                  <input
+                    id="list-description"
+                    type="text"
+                    className="form-control"
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                    placeholder="Optional note for this collection"
+                  />
+                </div>
+              </div>
+              {formError && <p className="text-danger mt-2 mb-0" style={{ fontSize: 13 }}>{formError}</p>}
+              <div className="d-flex gap-2 mt-3">
+                <button type="submit" className="btn btn-primary">Create list</button>
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => { setShowForm(false); setFormError(''); }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
-          {formError && <p style={{ color: '#c0392b', fontSize: 13, marginTop: 10 }}>{formError}</p>}
-          <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
-            <button type="submit" className="btn-primary">Create list</button>
-            <button type="button" className="btn-secondary" onClick={() => { setShowForm(false); setFormError(''); }}>Cancel</button>
-          </div>
-        </form>
+        </div>
       )}
 
       {loading ? (
-        <p style={{ color: 'var(--text-secondary)' }}>Loading your lists...</p>
+        <p className="text-secondary">Loading your lists...</p>
       ) : lists.length === 0 ? (
-        <div style={{
-          textAlign: 'center',
-          padding: '72px 20px',
-          background: 'white',
-          border: '1px solid var(--border-light)',
-          borderRadius: 'var(--radius-lg)',
-        }}>
-          <p style={{ fontFamily: 'var(--font-serif)', fontSize: 22, marginBottom: 8 }}>No lists yet</p>
-          <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 18 }}>Create your first personal list.</p>
-          <button className="btn-primary" onClick={() => setShowForm(true)}>
-            Create your first list
-          </button>
+        <div className="card text-center py-5">
+          <div className="card-body">
+            <p className="page-title mb-2" style={{ fontSize: 22 }}>No lists yet</p>
+            <p className="text-secondary mb-4" style={{ fontSize: 14 }}>Create your first personal list.</p>
+            <button className="btn btn-primary" onClick={() => setShowForm(true)}>
+              Create your first list
+            </button>
+          </div>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 18 }}>
-          {/* .map() creates one ListCard for each list in the array. */}
-          {/* key helps React identify each list card. */}
-          {lists.map((list, index) => <ListCard key={list.id} list={list} index={index} />)}
+        <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+          {lists.map((list, index) => (
+            <div key={list.id} className="col">
+              <ListCard list={list} index={index} />
+            </div>
+          ))}
         </div>
       )}
     </div>

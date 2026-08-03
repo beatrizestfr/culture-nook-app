@@ -4,27 +4,23 @@ const LibraryContext = createContext();
 const API_URL = 'http://localhost:3001';
 
 function getUserId(email) {
-  // I use the email as a simple user id for this demo project.
   return email.trim().toLowerCase();
 }
 
-// I export this so the rest of the app can wrap itself in the shared context.
 export function LibraryProvider({ children }) {
-  // These states are shared with many pages through context.
   const [items, setItems] = useState([]);
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [user, setUser] = useState(() => {
-    // This keeps the user logged in after refresh.
     const saved = localStorage.getItem('cnook_user');
     return saved ? JSON.parse(saved) : null;
   });
 
   useEffect(() => {
-    // useEffect runs after render; here I reload data when the user changes.
+    let cancelled = false;
+
     async function loadData() {
-      // !user means "if there is no user".
       if (!user) {
         setItems([]);
         setLists([]);
@@ -39,32 +35,33 @@ export function LibraryProvider({ children }) {
       try {
         const userId = encodeURIComponent(user.id);
 
-        // I only fetch items that belong to this user.
         const itemsResponse = await fetch(`${API_URL}/items?userId=${userId}`);
         if (!itemsResponse.ok) throw new Error('Could not load items');
         const loadedItems = await itemsResponse.json();
 
-        // Lists are also filtered by userId, so users stay separate.
         const listsResponse = await fetch(`${API_URL}/lists?userId=${userId}`);
         if (!listsResponse.ok) throw new Error('Could not load lists');
         const loadedLists = await listsResponse.json();
 
-        setItems(loadedItems);
-        setLists(loadedLists);
+        if (!cancelled) {
+          setItems(loadedItems);
+          setLists(loadedLists);
+        }
       } catch (err) {
-        setError(err.message);
+        if (!cancelled) setError(err.message);
       }
 
-      setLoading(false);
+      if (!cancelled) setLoading(false);
     }
 
     loadData();
+
+    return () => { cancelled = true; };
   }, [user]);
 
   function login(email, name = '') {
     const cleanEmail = email.trim().toLowerCase();
     const displayName = name.trim() || cleanEmail.split('@')[0];
-    // This object keeps related user values together as key/value pairs.
     const currentUser = {
       id: getUserId(cleanEmail),
       email: cleanEmail,
@@ -73,14 +70,12 @@ export function LibraryProvider({ children }) {
     };
 
     localStorage.setItem('cnook_user', JSON.stringify(currentUser));
-    // I clear old screen data before loading this user's own data.
     setItems([]);
     setLists([]);
     setUser(currentUser);
   }
 
   function logout() {
-    // Logging out removes the saved user and clears private data from the screen.
     localStorage.removeItem('cnook_user');
     setUser(null);
     setItems([]);
@@ -91,7 +86,6 @@ export function LibraryProvider({ children }) {
     if (!user) throw new Error('You must be signed in to add an item.');
 
     const itemToSave = {
-      // Spread keeps the form fields, then I add user-specific values.
       ...newItem,
       userId: user.id,
       rating: Number(newItem.rating),
@@ -101,7 +95,6 @@ export function LibraryProvider({ children }) {
     };
     delete itemToSave.status;
 
-    // POST creates a new item in db.json through json-server.
     const response = await fetch(`${API_URL}/items`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -110,7 +103,6 @@ export function LibraryProvider({ children }) {
 
     if (!response.ok) throw new Error('Could not add item');
     const savedItem = await response.json();
-    // This updates the UI right away without needing a full refresh.
     setItems(prevItems => [...prevItems, savedItem]);
     return savedItem;
   }
@@ -119,11 +111,9 @@ export function LibraryProvider({ children }) {
     if (!user) throw new Error('You must be signed in to update an item.');
 
     const oldItem = items.find(item => item.id === id);
-    // This stops one user from editing another user's item.
     if (!oldItem || oldItem.userId !== user.id) throw new Error('Item not found');
 
     const itemToSave = {
-      // Spread copies the old item data before I replace some parts.
       ...oldItem,
       ...updatedItem,
       userId: user.id,
@@ -134,7 +124,6 @@ export function LibraryProvider({ children }) {
     };
     delete itemToSave.status;
 
-    // PUT replaces the old item with the edited version.
     const response = await fetch(`${API_URL}/items/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -143,7 +132,6 @@ export function LibraryProvider({ children }) {
 
     if (!response.ok) throw new Error('Could not update item');
     const savedItem = await response.json();
-    // map keeps every item except the one that was just edited.
     setItems(prevItems => prevItems.map(item => item.id === id ? savedItem : item));
   }
 
@@ -153,13 +141,11 @@ export function LibraryProvider({ children }) {
     const oldItem = items.find(item => item.id === id);
     if (!oldItem || oldItem.userId !== user.id) throw new Error('Item not found');
 
-    // DELETE removes the item from the fake API.
     const response = await fetch(`${API_URL}/items/${id}`, { method: 'DELETE' });
     if (!response.ok) throw new Error('Could not delete item');
 
     setItems(prevItems => prevItems.filter(item => item.id !== id));
     setLists(prevLists => prevLists.map(list => ({
-      // Spread copies the list, then itemIds gets changed.
       ...list,
       itemIds: (list.itemIds || []).filter(itemId => itemId !== id),
     })));
@@ -169,7 +155,6 @@ export function LibraryProvider({ children }) {
     if (!user) throw new Error('You must be signed in to create a list.');
 
     const listToSave = {
-      // A new list starts empty, then items can be added later.
       name: newList.name.trim(),
       description: newList.description?.trim() || '',
       itemIds: [],
@@ -194,10 +179,9 @@ export function LibraryProvider({ children }) {
     const oldList = lists.find(list => list.id === id);
     if (!oldList || oldList.userId !== user.id) throw new Error('List not found');
 
-    const itemIds = (updatedList.itemIds || []).filter(itemId => {
-      // I only keep ids for items that still exist.
-      return items.some(item => item.id === itemId);
-    });
+    const itemIds = (updatedList.itemIds || []).filter(itemId =>
+      items.some(item => item.id === itemId)
+    );
 
     const listToSave = {
       ...oldList,
@@ -214,7 +198,6 @@ export function LibraryProvider({ children }) {
 
     if (!response.ok) throw new Error('Could not update list');
     const savedList = await response.json();
-    // This replaces just the edited list in state.
     setLists(prevLists => prevLists.map(list => list.id === id ? savedList : list));
   }
 
@@ -230,7 +213,6 @@ export function LibraryProvider({ children }) {
   }
 
   return (
-    // Everything inside this provider can use useLibrary().
     <LibraryContext.Provider value={{
       user, login, logout,
       items, lists, loading, error,
@@ -243,6 +225,5 @@ export function LibraryProvider({ children }) {
 }
 
 export function useLibrary() {
-  // This custom hook is the shortcut I use in pages/components.
   return useContext(LibraryContext);
 }

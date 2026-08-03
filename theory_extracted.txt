@@ -1,0 +1,1536 @@
+=== 06-responsiveDesign.pptx (26 slides) ===
+  [Slide 1]
+    Bootstrap – media queries
+    Responsive design
+    GUI design – Sofie Beerens
+    1
+  [Slide 2]
+    display the same content and functionality on screens of different sizes
+    what?
+    2
+    GUI design
+  [Slide 3]
+    web page designed for computer screen is scaled down to make sure the entire web page fits the screen.
+    => Control of viewport needed
+    Default browser reaction
+    3
+    GUI design
+  [Slide 4]
+    the user's visible area of a web page
+    Set the viewport:
+    width=device-width: 	sets the width of the page to 					follow the screen-width of the 					device
+    initial-scale=1.0:	sets the initial zoom level when 					the page is first loaded by the 					browser
+    viewport
+    4
+    GUI design
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  [Slide 5]
+    No viewport		      viewport
+    5
+    GUI design
+  [Slide 6]
+    Css media Queries
+    6
+    GUI design
+    allows to check for:
+    width and height of viewport
+    width and height of device
+    orientation (landscape or portrait mode?)
+    Resolution
+    Browser support:
+  [Slide 7]
+    Css media Queries
+    7
+    GUI design
+    syntax:
+    @media not|only mediatype and (expressions) {    CSS-Code;}
+    or in css link:
+    <link rel="stylesheet" media="mediatype and|not|only (expressions)" href="style.css">
+  [Slide 8]
+    Css media queries
+    8
+    GUI design
+    Media types
+    example:
+    @media screen and (min-width: 480px) {    #leftsidebar {width: 200px; float: left;}    #main {margin-left:216px;}}
+  [Slide 9]
+    Mobile first:
+    default CSS for mobile screen
+    Add media queries for larger screens
+    Typical device breakpoints:
+    Different breakpoints needed for different devices
+    Define around 5 groups
+    < 600px 		phones
+    600px -> 768px	portrait tablets and large phones
+    768px -> 992px	landscape tablets
+    992px -> 1200px	desktop/laptop screen
+    > 1200px		large laptop and desktop screen
+    Orientation
+    Css media queries
+    9
+    GUI design
+    @media only screen and (orientation: landscape) { … }
+  [Slide 10]
+    Pro:
+    Very fine control over layout for all possible screen sizes and orientations
+    Con:
+    Very labour intensive if you have to redefine the full screen layout for every possible screen size
+    => Grid based layout
+    CSS Media queries
+    10
+    GUI design
+  [Slide 11]
+    Easier to place elements on the page
+    Responsive grid-view:
+    12 columns
+    total width of 100%
+    columns resize with page width
+    Grid based layout
+    11
+    GUI design
+  [Slide 12]
+    box-sizing property to border-box for all HTML elements => padding and border included in width and heigth of element
+    Define classes for all possible col widths:
+    (one col: 100% / 12 = 8.33%)
+    Responsive grid
+    12
+    GUI design
+    * {      box-sizing: border-box;}
+    .col-1 {width: 8.33%;}.col-2 {width: 16.66%;}.col-3 {width: 25%;}.col-4 {width: 33.33%;}.col-5 {width: 41.66%;}.col-6 {width: 50%;}.col-7 {width: 58.33%;}.col-8 {width: 66.66%;}.col-9 {width: 75%;}.col-10 {width: 83.33%;}.col-11 {width: 91.66%;}.col-12 {width: 100%;}
+  [Slide 13]
+    To place cols next to each other => float
+    All cols float => do not define the height of the row anymore => add ::after
+    example
+    Responsive grid
+    13
+    GUI design
+    [class*="col-"] {    float: left;    padding: 15px;}
+    .row::after {    content: "";    clear: both;    display: block;}
+    <div class="row">    <div class="col-3">...</div>
+    <div class="col-9">...</div>    <!– always add up to 12 cols --></div>
+  [Slide 14]
+    Mobile first
+    default layout = layout for extra small devices
+    col width of 100% for all col classes
+    Combine with media queries
+    14
+    GUI design
+    [class*="col-"] {    width: 100%;}
+  [Slide 15]
+    Create col classes for all 12 col widths for every breakpoint:
+    Combine with media queries
+    15
+    GUI design
+    @media only screen and (min-width: 600px) {  /* For tablets: */  .col-s-1 {width: 8.33%;}  .col-s-2 {width: 16.66%;}  .col-s-3 {width: 25%;}  .col-s-4 {width: 33.33%;}  .col-s-5 {width: 41.66%;}  .col-s-6 {width: 50%;}  .col-s-7 {width: 58.33%;}  .col-s-8 {width: 66.66%;}  .col-s-9 {width: 75%;}  .col-s-10 {width: 83.33%;}  .col-s-11 {width: 91.66%;}  .col-s-12 {width: 100%;}}
+    @media only screen and (min-width: 768px) {  /* For desktop: */  .col-1 {width: 8.33%;}  .col-2 {width: 16.66%;}  .col-3 {width: 25%;}  .col-4 {width: 33.33%;}  .col-5 {width: 41.66%;}  .col-6 {width: 50%;}  .col-7 {width: 58.33%;}  .col-8 {width: 66.66%;}  .col-9 {width: 75%;}  .col-10 {width: 83.33%;}  .col-11 {width: 91.66%;}  .col-12 {width: 100%;}}
+  [Slide 16]
+    Combine classes in HTML:
+    example
+    Basis for responsive CSS frameworks
+    Combine with media queries
+    16
+    GUI design
+    <div class="row">  <div class="col-3 col-s-3">...</div>  <div class="col-6 col-s-9">...</div>  <div class="col-3 col-s-12">...</div></div>
+  [Slide 17]
+    Framework: bootstrap
+    17
+    GUI design
+    Originally developed within Twitter under the name "Twitter Blueprint".
+    Released as open source project on August 19, 2011
+    Bootstrap 2: 	Released on 31 January 2012
+    Bootstrap 3: 	(better for mobile devices) 		     	released on 19 August2013
+    Bootstrap 4:  	Completely new framework! 		     		     	Not compatible with older versions! 	              			Not for IE9 or lower 			Released in December 2017
+  [Slide 18]
+    Installation
+    18
+    GUI design
+    CDN:
+    Download: https://getbootstrap.com/
+  [Slide 19]
+    In head:
+    In body:
+    Use container wrapper with class:
+    .container : responsive container with fixed width
+    .container-fluid: full width container
+    Page setup
+    19
+    GUI design
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    Screen width = device width
+    Zoom level 1 after loading
+  [Slide 20]
+    Fixed width container (class="container")
+    Full width container (class="container-fluid")
+    container
+    20
+    GUI design
+  [Slide 21]
+    container with rows with up to 12 columns
+    Framework: bootstrap
+    21
+    GUI design
+  [Slide 22]
+    Basic structure grid:
+    Framework: bootstrap
+    22
+    GUI design
+    <div class="container">  <div class="row">    <div class="col-*-*"></div>    <div class="col-*-*"></div>  </div>  <div class="row">    <div class="col-*-*"></div>    <div class="col-*-*"></div>    <div class="col-*-*"></div>  </div>  <div class="row">    ...  </div></div>
+    grid class
+    = dimension for tilting point
+    span
+  [Slide 23]
+    grid classes:
+    .col- 		xsmall devices 		screen width < 576px
+    .col-sm- 	small devices  		screen width ≥ 576px
+    .col-md- 	medium devices	screen width ≥ 768px
+    .col-lg- 		large devices		screen width ≥ 992px
+    .col-xl- 		xlarge devices		screen width ≥ 1200px
+    Combining possible
+    Framework: bootstrap
+    23
+    GUI design
+    <!-- 50%/50% split on xsmall devices and 75%/25% split on larger --><div class="row">  <div class="col-6 col-sm-9">col-6 col-sm-9</div>  <div class="col-6 col-sm-3">col-6 col-sm-3</div></div>
+  [Slide 24]
+    Framework: bootstrap
+    24
+    GUI design
+  [Slide 25]
+    More info on bootstrap:
+    https://getbootstrap.com/docs/4.0/getting-started/introduction/
+    tutorials:
+    https://www.tutorialspoint.com/bootstrap/index.htm
+    https://www.w3schools.com/bootstrap/default.asp
+    Bootstrap: info
+    25
+    GUI design
+  [Slide 26]
+    Framework: w3.css
+    26
+    GUI design
+    example
+
+=== 07-installation_components.pptx (29 slides) ===
+  [Slide 1]
+    1
+    Installation - components
+  [Slide 2]
+    What is React?
+    2
+    JavaScript library for building user interfaces
+    Since javascript works in the frontend =>very fluid transitions in web apps by using javascript frontend “calculations”
+  [Slide 3]
+    Why not plain JavaScript?
+    3
+    complex JavaScript code is:
+    difficult to write
+    hard to maintain or edit
+    error-prone
+    React:
+    Simpler mental model
+  [Slide 4]
+    Installation
+    4
+    The react components are written in JSX, not understood by browser	=> node.js is needed for that
+  [Slide 5]
+    Installation: node and npm
+    5
+    Node.js:
+    open source server framework
+    run JavaScript outside the browser, in the JavaScript engine of Node.js itself
+    contains a built-in HTTP server => possible to run a web server without Apache
+    download: https://nodejs.org/en/download/
+    NPM:
+    Node.js Package Manager
+    Package or module = JavaScript library
+    with NPM: install necessary packages
+  [Slide 6]
+    6
+    installation: cmder
+    React Vite
+    = command line interface for React
+    Very convenient to create projects, …
+    Runs in terminal but standard windows terminal (cmd) not so handy
+    Install cmder (full version) at http://cmder.app/
+    GUI design
+  [Slide 7]
+    Create new Project
+    7
+    In cmder enter the following commands:
+    If npm suggests to install an extra package create-vite => choose ‘y’
+    Fill in project name and select React framework:
+    > cd [ToWorkingDir]
+    > npm create vite@latest
+  [Slide 8]
+    Create new Project
+    8
+    Finally, choose the JavaScript variant, select no to the question on the beta version usage and yes to npm install
+    To install all necessary build-in packages for your newly created project, run:
+    > cd [projectName]
+    > npm install
+    > npm run dev
+    launches a webserver, watches your files and rebuilds the app as you make changes to those files
+    Now surf to http://localhost:5173
+  [Slide 9]
+    Project structure
+    9
+    node_modules: all locally installed node modules                           (npm install)
+    assets:  extra parts of the website such as images, …
+    index.html:  start page of the app, does not need to be changed
+    package.json: contains versions for all packages                         used in the project
+  [Slide 10]
+    Demo project
+    10
+    Find “count is 0” in index.html
+    is filled by the App.jsx component with its own html template
+  [Slide 11]
+    Pages are made up of components
+    Reusable
+    Can be nested
+    11
+    Architecture React app
+    Course
+    Course
+  [Slide 12]
+    Why components?
+    12
+    Separation of concerns
+    Different components handle different data and logic:
+    Some are used to show data
+    Some to request data
+    …
+    Simplifies working on complex apps
+    Reusable Building Blocks
+    Compose UI from small building blocks
+    Reuse building blocks in different parts of the UI (e.g. reusable button)
+    Related code lives toghether
+    Related HTML, JS and CSS are stored together
+  [Slide 13]
+    Component
+    13
+    Component is JS function with:
+    name:
+    must start with uppercase (needed for React to make the difference with HTML build-in tags)
+    multi-word must use PascalCase (e.g. “AppHeader”)
+    use names that describe the UI building block
+    return:
+    renderable content:
+    JSX (Javascript XML)
+    String, number, boolean, null, array
+  [Slide 14]
+    Demo project
+    14
+    “count is 0” can not be found in index.html !!
+    Includes main.jsx file
+  [Slide 15]
+    Rendering app component
+    15
+    Select div with id root
+    Use the renderer to render inside this element
+    Call the App component
+  [Slide 16]
+    App component
+    16
+    App component is a function with:
+    name:
+    App
+    return:
+    HTML and JS code
+    looks like HTML but is not
+    always the same!!
+    Import of used elements
+    Export of app function to be able to use it in other JSX files
+  [Slide 17]
+    Markup in JSX
+    17
+    JSX is stricter then HTML => always close tags:
+    <h1>….</h1>
+    <br />
+    Return a single root element:
+    wrap tags into shared parent like
+    <div> … </div>: extra div
+    <> …. </>: fragment (groups elements without impacting HTML tree in browser)
+    JS code inside JSX must be in between { }
+  [Slide 18]
+    Create new component
+    18
+    Store all components inside a folder ‘components’ in ‘src’ folder
+    separate .JSX file for every component
+    name of .jsx file is the same as the name of the component
+  [Slide 19]
+    19
+    Export component to be used in other .jsx files
+    Import component in App.jsx file
+    Use component in JSX
+  [Slide 20]
+    Adding styles
+    20
+    Using classes:
+    Inside JSX file:				Inside index.css file:
+    use className instead of            class in HTML:
+    inline-style inside JSX (only one-time style definitions!):
+  [Slide 21]
+    Add styles belonging to component
+    21
+    Create css file next to jsx file
+    Include in Header.jsx
+    Styles are not limited to this component !!!Keep using different class names
+  [Slide 22]
+    Adding CSS reset
+    22
+    Using npm, install a package called ‘normalize.css’
+    Import nomalize.css before the import of index.css in main.jsx:
+    > npm install normalize.css
+  [Slide 23]
+    Adding bootstrap
+    23
+    Using npm, install a package called ‘react-bootstrap’
+    Import bootstrap before the import of index.css and after nomalize.css in main.jsx:
+    In package.json:
+    > npm install react-bootstrap bootstrap
+    Adding bootstrap as well allows you to use it also without the special react-bootstrap components
+  [Slide 24]
+    React-Bootsrap
+    24
+    Package created for React based upon the bootstrap framework
+    Contains React components for different UI elements
+    Documentation:https://react-bootstrap.netlify.app/docs/getting-started/why-react-bootstrap
+  [Slide 25]
+    React-Bootstrap => button
+    25
+    Select a predefined style
+    Use Button component from React-Bootstrap library
+    import button component
+  [Slide 26]
+    Limiting css scope to component
+    26
+    Use CSS modules
+    For specific css belonging to only 1 component
+    Rename css file into .module.css
+    Import all css class names from module.css file into a JS object:
+    Use css class names from module.css file as follows:
+  [Slide 27]
+    Limiting css scope to component
+    27
+    Css class names inside module.css file will be renamed to unique css class names to avoid collision:
+  [Slide 28]
+    Debugging React Apps
+    28
+    F12 => developer tools:
+    Tab sources:
+  [Slide 29]
+    Debugging React Apps
+    29
+    Chrome plugin:
+    React Developer Tools
+    F12 => components
+    List of components in app with extra info like props, state, … (see later)
+
+=== 08-props_lists.pptx (29 slides) ===
+  [Slide 1]
+    1
+    Dynamic content
+  [Slide 2]
+    Dynamic content
+    2
+    To include dynamic content inside the HTML template of a component use {    }
+    Inside { } all regular JavaScript expressions are possible but:
+    Only for expressions that result in a value, not for function definitions!
+    If possible, use only variable names inside { } and put all corresponding calculatons outside of the { }
+  [Slide 3]
+    Dynamic attributes
+    3
+    Use { } to refer to JS const or var to determine the attribute value
+    avatar is a string that represents
+    the name of a CSS class
+    the value of the JS variable avatar is read and used as src for this img
+  [Slide 4]
+    Dynamic attributes => import images
+    4
+    Store images inside assets folder
+    Use import statement and { } to refer to image path
+  [Slide 5]
+    Where to store images?
+    5
+    public folder:
+    everything stored in public is made publicly available
+    http://localhost:5173/game-logo.png will show that image
+    inside index.html or other components, just use filename to refer to it
+    src/assets folder:
+    not publicly available
+    http://localhost:5173/src/assets/react.svg => error
+    addressed by importing in component via relative path
+    => Use public folder only for images that are used inside index.html, not for component images
+  [Slide 6]
+    Javascript Objects (key:value)
+    6
+    An object can contain values for many properties:
+    Or with extra line breaks for readability:
+    Access object properties:
+    or
+  [Slide 7]
+    Dynamic content functions and objects
+    7
+    Using function calls
+    Using objects
+  [Slide 8]
+    Dynamic content functions and objects
+    8
+    Using complete object inside { } => {{ }}
+  [Slide 9]
+    9
+    props
+  [Slide 10]
+    Reusable components with input data
+    10
+    Components can be reused:
+    course component to show content of 1 course
+    how do you pass info of 1 course into course component?
+    props
+    Course
+    Course
+  [Slide 11]
+    Call component with props
+    11
+    Add props to component as
+    attributes:propname = value
+    Listed props will be convertedinto a JS object by React:
+    Access props in child withprops input parameter
+  [Slide 12]
+    Use props inside component
+    12
+    Add props input parameter
+    Access props fields like any JS object fields
+    props received object from parent
+  [Slide 13]
+    Solve VS code error
+    13
+    There will be an error shown in VS code when using props:
+    This is due to missing type checking for the props. However, this typechecking will be deprecated as of React19 and is often overcome by using TypeScript instead of JavaScript => we will disregard the error by adding at the top of every file:
+  [Slide 14]
+    Props accept all value types
+    14
+    String value
+    Number value
+    Curly braces needed
+    to pass value as
+    number
+    With “ “, it would be
+    taken as a string
+    Object value
+    {{ }} is no special
+    syntax!!
+    It is symply a JS object
+    passed as a value
+    Array value
+  [Slide 15]
+    Pass object
+    15
+  [Slide 16]
+    Using JS Object Destructuring
+    16
+    object props is being split into separatevariables. Here props has only one field   => {course} = propswill store the value of the course keyinside props into the object course for
+    further usage inside the function
+    props object:
+    {course} = props
+  [Slide 17]
+    Object Destructuring nested objects
+    17
+    props object:
+    use separate variables for all fields inside course field:
+    adding a default value in case a field is missing
+  [Slide 18]
+    Special children prop
+    18
+    automatically stored into props.children
+    or
+    Mainly useful if only one piece of renderable content must be passed to component
+  [Slide 19]
+    Forwarding props to wrapped elements
+    19
+    Spread operator used to merge all non-listed props from parent into props object
+    Spread operator used to spread all props in the object to the h3 element
+  [Slide 20]
+    Setting HTML element through props
+    20
+    <…> will be transformed by React into corresponding HTML tag if the name in between <> starts with a capital letter
+  [Slide 21]
+    Arrow functions
+    21
+    Used for anonymous functions (function without a name)
+    function() {			  equivalent to          	      () => {      console.log(‘Hello’);					 console.log(‘Hello’);}							      }
+    General syntax:
+    (argument1, argument2, argumentN) => { statements }
+    1 argument:
+    argument => { statements }
+    no arguments:
+    () => { statements}
+    More info: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
+  [Slide 22]
+    22
+    Convert list data to component array
+  [Slide 23]
+    Outputting list data dynmically
+    23
+    In JSX an array can be outputted as follows:
+    To output a list of course detail components, convert array of course data into array of course detail components using the JS map function:
+    map stores new array to roots by modifying every element of numbers according to arrow function used inside map
+    const numbers = [1, 4, 9];
+    const roots = numbers.map((num) => Math.sqrt(num));
+    // roots is now     [1, 2, 3]
+    // numbers is still [1, 4, 9]
+  [Slide 24]
+    Outputting list data dynmically
+    24
+    courseItem => (
+    <li><CourseDetail course = {courseItem} /></li>)
+    courseItem => (
+    <li><CourseDetail course = {courseItem} /></li>)
+    If only return statement inside callback,
+    can be simplified to
+  [Slide 25]
+    Key prop needed for array elements
+    25
+    In VS code => error message Missing “key” prop:
+    For efficient rendering, React needs to have a unique key for every iterative element. Here <li> is repeated with some content inside => add key to <li>:
+    Key must be unique for every element in the list => title of the course
+  [Slide 26]
+    component instances are independent
+    26
+    Every course component created by map works independently from the others
+    Suppose a click event is added to the courses component
+    Clicking Web development will only influence the Web development component, not the other instances
+    Components use shared logic but once used inside an app, they are independent
+  [Slide 27]
+    Keep components pure
+    27
+    JS function is pure if:
+    it minds it own business
+    same inputs => same outputs
+    pure component function:
+    same inputs => return same JSX
+  [Slide 28]
+    Keep components pure
+    28
+    drinkers = {2}
+    always 2 cups of water, …
+    no new elements are added inside component
+  [Slide 29]
+    Unpure component
+    29
+    external variable guest is changed inside component Cup
+    calling cup multiple times results in different output each time!!
+    Use prop to make it pure:
+
+=== 09-events_state.pptx (35 slides) ===
+  [Slide 1]
+    1
+    Events
+  [Slide 2]
+    Adding eventhandlers
+    2
+    JSX => add eventhandler to react components/ HTML tags using:
+    onEvent={ functionName }
+    No quotes allowed!!
+    onEvent prop
+    Value to pass to event prop is a reference to the function to be executed
+    No function call!!
+    No ()
+  [Slide 3]
+    Click event => example
+    3
+    Create TabButton for every course in courses
+    onClick prop
+  [Slide 4]
+    Click event example: remarks
+    4
+    handleClick function is defined inside the TabButton component:
+    Needed to be able to access props of the component
+    For small handle functions, inline functions are also possible:
+  [Slide 5]
+    Add event to a parent component
+    5
+    Define eventhandler function inside parent
+    Add prop to child starting with on… to indicate it will be used to pass an eventhandler function
+    Pass eventhandler function to new prop
+    1
+    2
+    3
+  [Slide 6]
+    get eventhandler function in child
+    6
+    Add extra prop input (object destructuring)
+    Pass value of onSelect prop to onClick event prop
+    1
+    2
+  [Slide 7]
+    Passing event to child using prop forwarding
+    7
+    use directly onClick instead of custom onSelect since onClick is now also passed to the button element
+  [Slide 8]
+    Passing custom arguments to events
+    8
+    onEvent={() => handleSelect()}
+    Anonymous function is now passed as value to event prop
+    arguments can be passed
+    in between ( )
+  [Slide 9]
+    Passing arguments => example
+    9
+    use index in map to get course index inside courses array
+    pass index to handleSelect function
+  [Slide 10]
+    Reading props in event handlers
+    10
+    arrow function to execute both functions after clicking.
+  [Slide 11]
+    Event propagation
+    11
+    click button:
+    click event button executed first
+    click event is bubbled up to parent <ul> => click event parent executed
+    1
+    2
+  [Slide 12]
+    Event object
+    12
+    Event occurs 	=> event object e is created and handed to eventhandler
+    event object contains:
+    target: HTML event that triggered the event
+    nativeEvent: the underlying JavaScript event
+    preventDefault(): function to stop default behaviour of event (e.g.submit of 			    form
+    stopPropagation(): function to stop event from bubbling to parent
+  [Slide 13]
+    Event object
+    13
+    The click event does not propagate to the description parent component => no log from the menubar
+  [Slide 14]
+    Change content depending on event
+    14
+    change courseDetails content
+    Starting value for courseDetails
+    Change of courseDetails is not shown?
+  [Slide 15]
+    UI updates in React
+    15
+    React component functions execute only once when component is first created
+    @creation of courses component:
+    starting value of courseDetails is shown
+    After clicking a tab button:
+    handleSelect function is executed (see console.log)
+    component function is not executed again => no new rendering of courseDetails inside div
+    => concept needed to force react to re-execute component function
+    => state
+  [Slide 16]
+    Rendering in React
+    16
+    Rendering is done in 3 steps:
+    trigger a render
+    app loading
+    state update
+    rendering the component tree (see next slide)
+    Based on virtual DOM
+    commiting to the DOM
+    initial: create and commit all HTML elements to DOM
+    re-render: update only changed elements in HTML DOM
+  [Slide 17]
+    Initial rendering
+    17
+    tree structure is build starting from the App component
+    virtual DOM is created based upon component tree
+    = DOM consisting out of React elements instead of HTML elements
+  [Slide 18]
+    re-rendering
+    18
+    state of component B changes => new tree is created for B, B1 and B1-1
+    new virtual DOM with React elements
+    differences between old DOM and new DOM are determined
+    suppose only B1 and B1-1 are changed
+  [Slide 19]
+    State: component’s memory
+    19
+    useState hook provides:
+    state variable:
+    used to retain data between renders
+    state setter function:
+    update state variable and trigger React to render component again
+    const [count, setCount] = useState(0)
+    holds value of state:
+    State updating function:- updates value stored in count- tells react to re-execute the component function
+    Initial state value
+    array destructuring for returned array from useState
+    import { useState } from "react";
+  [Slide 20]
+    Hooks
+    20
+    hook:
+    function starting with use
+    special function that is only available while React is rendering
+    allows to hook into different React features
+    can only be called at the top of a component (not inside condition, loop, nested functions)
+    can only be called from React funtions (components or hooks)
+    can be seen as some kind of declaration about the component’s needs:
+    Use React features at the top of the component like import modules at the 	top of a file
+  [Slide 21]
+    State: example
+    21
+    change state
+    Starting value for selectedCourse state
+    new state content is shown
+    State variable is updated only when re-rendering of component starts
+  [Slide 22]
+    State: example
+    22
+    What if we want to output not only the description but also title, lecturer, … depending on current state?
+    use index of selected course as state value
+    integer vs string !!!
+  [Slide 23]
+    Conditional rendering => ternary operator
+    23
+    @ page load selectedCourse is null
+    Div to show when selectedCourse is no longer null
+    { } needed to use dynamic content/ JS inside JSX
+    test
+    true
+    false
+    All renderable output must always be inside 1 one top level element (here div)
+    If for some conditions, nothing needs to be rendered, use null
+  [Slide 24]
+    Conditional rendering => && operator
+    24
+    With && the righthand content is rendered if the lefthand condition is met
+    Using selectedCourse && … will not work here since an index of 0 will be seen by JS as false
+  [Slide 25]
+    Conditional rendering => using var
+    25
+  [Slide 26]
+    Dynamic styling
+    26
+    Conditions can also be used to set className:
+    With:
+  [Slide 27]
+    Dynamic styling
+    27
+    set isSelected prop to true for index stored in state
+  [Slide 28]
+    State is isolated and private
+    28
+    2 instances of description component:
+    each instance has own state
+    parent does not know about the state of the children
+    State is owned by component in which it is declared
+  [Slide 29]
+    State is a snapshot
+    29
+  [Slide 30]
+    State is a snapshot
+    30
+    button is clicked
+    setNumber sets the new number value to 1, three times
+    re-render is triggerd
+    component is re-rendered with current value of number set to 1
+    When component is rendered, current value of state is used to set all components elements:
+  [Slide 31]
+    State: update based on old state
+    31
+    Use an updater function to update state when based upon old state value
+    React queues this function to be processed after all the other code in the event handler has run.
+    during the next render, React goes through the queue and gives you the final updated state.
+  [Slide 32]
+    State: update based on old state
+    32
+    at start of new render, useState is called
+    React goes through the queue.
+    the previous number state was 0 => React passes 0 to the first updater function as the n argument.
+    React takes the return value of previous updater function and passes it to the next updater as n, and so on:
+  [Slide 33]
+    Updating object/array in state
+    33
+    Only change state using the setter function
+    Make a copy into a new object/array and return that as new state value
+    For multi-dimensional arrays a deep copy is needed
+    copy old object into new object
+    overwrite color in new object
+  [Slide 34]
+    34
+    Common array functions and state
+    More explanation and examples: https://react.dev/learn/updating-arrays-in-state
+  [Slide 35]
+    35
+    Class vs Function components
+    Older React code often still contains Class components. In this course only Function components
+
+=== 10-userInput-forms.pptx (21 slides) ===
+  [Slide 1]
+    1
+    User input fields
+  [Slide 2]
+    controlled vs uncontroled components
+    2
+    controlled
+    state managed by React:state is stored in React’s memory and updated through props
+    state change => component’s UI update
+    need eventhandlers to update state and trigger re-rendering
+    predictable and centralized state management, easy to manipulate
+    uncontrolled
+    state managed inside component, directly interacting with DOM
+    syncing state and UI is done without React intervention
+    direct interaction with DOM to access and update state
+    can lead to more efficient updates for large or complex components
+  [Slide 3]
+    controlled input fields
+    3
+    use value/checked property to control UI of input fields
+    connect input field to a state variable
+    use setState function to change state on input field changes
+    to retrieve current value of input field => state
+    connect value of input to state var
+    event object contains information about change event
+    read current value of input field and store into state triggering a re-rendering with new state value
+  [Slide 4]
+    4
+    create state for input field
+    change state when input field changes
+    filter courses based on state variable
+    link input field to state
+    display filtered courses list
+  [Slide 5]
+    5
+    Forms
+    Needed if more inputs are to be threated together
+  [Slide 6]
+    Handling forms: UI
+    6
+    ‘htmlFor’ attribute to link label to input field instead of normal HTML attribute ‘for’
+  [Slide 7]
+    Form submission default behaviour
+    7
+    React app running in browser
+    server serving the React app
+    Browser sends HTTP request with form data to server
+    server responds by resending index.html file + all other React files causing the app to reload in the browser
+    All states, … are lost => we want to prevent this default behaviour by handling the form submission inside the component
+  [Slide 8]
+    form onSubmit event
+    8
+    When form is submitted, form triggers submit event with corresponding event listener onSubmit
+    prevents default submit behaviour
+  [Slide 9]
+    Using multiple states
+    9
+    in this handler as HTTP call to a backend can be made to store data in a DB (see later)
+  [Slide 10]
+    Use form values in preview window
+    10
+  [Slide 11]
+    combine into 1 state
+    11
+    course object is not destructured
+    use course object as state variable
+    [ ] JS syntax to use variable as key
+    arrow function to pass identifier, but then arrow function gets event object
+  [Slide 12]
+    Using formData
+    12
+    Too many separate inputs to handle with onChange!
+  [Slide 13]
+    Using formData
+    13
+    Creates new FormData object holding all data from form fields that have name attribute
+    extracts form entry data into object with as keys the names of the input fields
+  [Slide 14]
+    Validating form inputs
+    14
+    Built-in HTML validators:
+    required
+    minlength,maxlength
+    min, max
+    same as plain HTML
+    Custom validators:
+    @every keystroke
+    @blur/focus
+    @form submit
+  [Slide 15]
+    Writing input validators => regex
+    15
+    Check username versus following rules:
+    only alphanumeric characters (letters (small or large) and numbers)
+    May contain _ , - or space but immediately followed by an alphanumeric character
+    No _, - or space at beginning or end of username
+    Regex:
+    /^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/
+  [Slide 16]
+    Validating @ every keystroke
+    16
+    state controlled inputs needed
+    Add boolean to compute input validity at every (re)-rendering
+  [Slide 17]
+    Validating @ every keystroke
+    17
+    Conditionally add paragraph to JSX based upon previously defined boolean
+    Use conditional styling of visibility of error paragraph to avoid jumps in the UI
+  [Slide 18]
+    Validating @ out of focus
+    18
+    state controlled inputs needed
+    add state to remeber if an input has focus or not
+  [Slide 19]
+    Validating @ out of focus
+    19
+    detect focus loss
+    set corresponding boolean to true in didEdit
+    reset boolean to false while editing
+  [Slide 20]
+    Validating @ form submission
+    20
+    Validation @keystroke/ @blur does not prevent submission
+    => add validation @ form submission before sending data to backend
+    create a state to re-render UI after form submission
+  [Slide 21]
+    Validating @ form submission
+    21
+    use separate input states to determine validation if keystroke validation is also used
+
+=== 11-stateManagement.pptx (27 slides) ===
+  [Slide 1]
+    1
+    State management
+  [Slide 2]
+    React = Declarative UI
+    2
+    Declare what you want to show and React figures out how to update the UI
+    Building component:
+    Identify different visual states:
+    empty => when form is empty, disable submit button
+    typing => enable submit button
+    submitting => disable submit button and show                        spinner
+    success => thank you message is shown instead                    of a form
+    …
+    Represent these states in memory using useState:
+    isTyping, isSubmitting, isSucces, isEmpty, isError
+    error (to hold an error message), answer (to hold the answer), …
+  [Slide 3]
+    React = Declarative UI
+    3
+    define state structure:
+    are all state combinations valid?
+    isTyping and isSubmitting can never be true at the same time => combine them into 1 state formStatus
+    can one state be deduced from another?
+    isEmpty  answer.length === 0, isError  error != null
+    all information that can be deduced from props and/or other states must not be in a state
+    group related states:
+    if always updating 2 or more state variables at same time => combine into 1 stateposition  x-coord and y-coord
+    avoid duplication in states
+    Connect eventhandlers to the different set-state functions
+  [Slide 4]
+    4
+    Courses component
+    CourseDetail component
+  [Slide 5]
+    Which states
+    5
+    Only one state is needed => id of selected course
+    Limit the amount of states to what is really needed and use derived states if possible (e.g. course inside CourseDetail will be derived from selected course id)
+    avoid duplicating state information. E.g. state selectedIndex and state course overlap so reduce to 1 state
+  [Slide 6]
+    sharing state between components
+    state: selected course
+    Am I selected?
+    Am I selected?
+    set selected course
+    show selected course
+    set next selectedcourse
+  [Slide 7]
+    Lifting state up
+    Lift state up to the closest ancestor component that has access to all components that need that state => in this case App component
+    state: selected course
+    manages
+    App
+    Courses
+    CourseDetail
+    CourseTile
+    CourseTile
+    pass state value via props
+    - show selected course
+    pass state value via props
+    Am I selected?
+    Am I selected?
+    set selected course
+    pass function via props to allows child component to initiate state change
+    - set next selected course
+  [Slide 8]
+    Lifting state up: App
+    state: selected course
+    manages
+    App
+    must be called when clicking ‘next’ button in CourseDetail component
+  [Slide 9]
+    Example: App
+    pass selectedCourse state to Courses via selectedId prop
+    use selectedCourse state to show/hide detail part
+    pass function via props to allows child component to initiate state change
+    use selectedCourse state to pass corresponding course to CourseDetail as course prop
+    pass set-state function to Courses for usage inside Courses component
+    pass set-state function to CourseDetail for usage inside CourseDetail component
+  [Slide 10]
+    Lifting state up: CourseDetail
+    onClick:
+    => calls local function handleClick
+    => calls passed setter function from the app component
+    => next course is computed and set in app component
+    course contains the course derived from selectedCourse
+  [Slide 11]
+    Lifting state up: Courses
+    11
+    onClick:
+    => calls local function handleClick with id of current course
+    => calls passed setter function from the app component with same id     => selected id is set in the app component
+    selectedId contains the selectedCourse state value
+    let CourseTile know if it is selected or not
+  [Slide 12]
+    Lifting state up: CourseTile
+    12
+    Set onClick to outer div
+  [Slide 13]
+    Who owns the state?
+    13
+    State used by:
+    1 component
+    component is owner of the state
+    define state inside this component
+    2 or more components:
+    they all need the same state and/or set-state function of this state
+    find the lowest common ancessor
+    this ancessor owns the state
+  [Slide 14]
+    Preserving / resetting state
+    14
+    State is isolated and preserved for every instance of a component with state for as long as that component is not removed from the app
+  [Slide 15]
+    Remove first counter
+    15
+    Both counters are rendered and clicked a few times such that states are 2 and 3 respectivily (showCounter = true)
+    counter 1 is re-rendered (showCounter = true)=> counter 1 state is reset to starting value 0
+    counter 1 is removed from DOM (showCounter = false) => replaced by empty slot=> counter 2 remains in slot 2 in app=> counter 2 does not loose state
+  [Slide 16]
+    Replace counter with another counter
+    16
+    Same component in same place in DOM preserves state:
+    => in both cases component of type Counter as first element inside app in DOM => same state
+  [Slide 17]
+    Replace counter with another component
+    17
+    different components in same place in DOM resets state:
+  [Slide 18]
+    No nested components!
+    18
+    MyTextField component is defined inside MyComponent component
+    Click button => setCounter changes state of MyComponent
+    myComponent is re-rendered
+    MyTextField is redefined as a new component
+    Text field is now a new component in the same place
+    State of MyTextField is reset
+  [Slide 19]
+    Prop drilling
+    19
+    = passing shared data through multiple layers of components
+    Leads to extra code to handle all that prop sharing
+    Some components only need to pass props from parent to child
+    context: allow ‘teleporting’ data to components in the tree that need it without passing props
+  [Slide 20]
+    Context
+    20
+    ‘teleporting’ data to components in the tree that need it without passing props
+    Create a context
+    Use the context in the component that needs the data (consumer)
+    Provide the context from the component that has the data (provider)
+  [Slide 21]
+    Context: example
+    21
+    state: favourites
+  [Slide 22]
+    App structure, no context
+    22
+    App
+    Courses
+    CourseDetail
+    CourseTile
+    Header
+    Modal
+    state: favourites
+    manages
+    state prop
+    state handling props
+    Favourites
+  [Slide 23]
+    Create context
+    23
+    store all context files in separate dir ‘store’
+    can be created to just pass state/state setters to components
+    when combined with a nested provider component, also all state management regarding that data can be grouped inside the context file
+  [Slide 24]
+    Create context
+    24
+    create an object that holds all data / functions to pass
+    to components
+    set default value for object, only used to define objectstructure => can be empty [], empty functions
+    create provider component to be used as a wrapperaround all components that want to use this content
+    all components inside provider component will be passed on to Provider that is created by React for every context
+    rendering code for provider component
+    state definition
+    starting value for context
+    state handling functions
+  [Slide 25]
+    Context starting value
+    25
+    connect context favs to state
+    connect context functions to state update functions
+  [Slide 26]
+    Wrap context
+    26
+    Wrap around all components that want to use the context
+    no props concerning
+    favourites state and/or stateupdate functions
+  [Slide 27]
+    Consume context
+    27
+    changing context causes component function to be re-executed
+    Import context and useContext hook
+    setup useContext hook in component
+    use list from context instead of prop
+    use remove function from context
+    object destructuring
+
+=== 12-HTTP-requests.pptx (25 slides) ===
+  [Slide 1]
+    1
+    HTTP requests – useEffect hook
+  [Slide 2]
+    React is frontend SPA
+    2
+    React is frontend only
+    All datachanges inside react app are lost whenever app reloads
+    => Use a DB to store data permanently
+  [Slide 3]
+    Backend => json-server
+    3
+    To quickly test the front end for this course, we will be using 'json-server'.
+    Installation:
+    npm install –g json-server
+    Run the server:
+    json-server db.json
+    db.json is a database file in the current directory containing the data in JSON format
+  [Slide 4]
+    Exchanging data between backend and frontend should be in text format (because of HTTP protocol) but often we want to exchange objects => JSON format.
+    JSON (JavaScript Object Notation)
+    text, written in the JavaScript 	object notation
+    Data can be accessed via: http://localhost:3000/
+    Here one endpoint:http://localhost:3000/courses
+    JSON format
+    4
+    Both keys and values have double quotes!
+  [Slide 5]
+    Get data using fetch
+    5
+    http request takes time => answer from fetch is a promise
+    .then waits until answer from fetch is ready and stores that into response
+    response.json() converts json object into array of objects with a promise => return to expose that promise
+    .then to catch that data and use set state function to set data to state
+    1
+    2
+    3
+    4
+  [Slide 6]
+    Problem using fetch like that!!
+    6
+    Fetching data works correctly but is repeated endlessly!!
+  [Slide 7]
+    Why endless loop?
+    7
+    at startup of app component: fetch is not yet completed => availableCourses = [ ]
+    after some time, fetch is finished:
+    availableCourses state is set to response data
+    state changes
+    app component function is executed again
+    new fetch request is sent
+    state changes again
+    …
+    We need another hook useEffect
+  [Slide 8]
+    useEffect hook
+    8
+    Used to do a setState after:
+    a function that is async (like getting data from server)
+    the first rendering of the component is done (because you need elements to be rendered before the setState can be executed)
+    after another state change
+    Do not use useEffect for:
+    code that should run only once when component is created => outside (on top) of component function
+    async code (like adding an item to the DB) that does not needs to be re-executed every time the component renders, but only when a user clicks something => inside the click handling function
+  [Slide 9]
+    useEffect hook usage
+    9
+    when useEffect is executed => registers the input function for execution after rendering
+    2 input parameters:
+    first: function (effect) to be executed
+    second: array of dependancies
+    effect is executed when component function is executed (render/re-render) and one of the dependancies has changed
+    special dependencies arrays:
+    [ ]: effect is executed only once the first time the component function is executed
+    Undefined: effect is executed after every render => ! endless loops!
+  [Slide 10]
+    Fetch data using useEffect
+    10
+    dependancies array is empty =>will only be executed once when
+    app function is executed the first time
+  [Slide 11]
+    Async and await
+    11
+    to remove the .then syntax, use ‘await’
+    ‘await’ can only be used inside a function decorated with async
+    do no place async in front of anonymous effect function!!
+    function definition inside useEffect function to assign the keyword await to
+    await waits until function execution is finished and returns result
+    call async function
+  [Slide 12]
+    error handling
+    12
+    add state to store error
+    checks HTTP response status (ok means 200)
+  [Slide 13]
+    moving functions to separate file
+    13
+    In case getting courses from DB is needed in multiple components => move logic to a separate file
+    .js since only JS functions, no JSX rendering code
+  [Slide 14]
+    POST request => add data to DB
+    14
+    add empty array to storefavourite courses
+    new endpoint
+    pass object as second argument in fetch
+    convert object to json
+    set http headers for json data
+    json server returns added course on success
+  [Slide 15]
+    POST request => add data to DB
+    15
+    to be able to use await
+    handle function called when clicking on heart
+    state update
+    DB update
+    old state version sincestate is only updated atnext rendering
+    state updated before data is sent to DB:
+    good for user experience (update is seen immidiately)
+    what if post request fails?
+  [Slide 16]
+    roll-back state update on fail
+    16
+    on error => set state back to previous state value
+  [Slide 17]
+    POST request => result
+    17
+  [Slide 18]
+    other requests
+    18
+    get one item:
+    url: node/id
+    overwrite all data of 1 item
+    url: node/id
+    method: PUT
+    Adjust part of data of 1 item
+    url: node/id
+    method: PATCH
+    body: object with all to be changed fields converted to JSON
+  [Slide 19]
+    Fetch initial favourites inside context
+    19
+    http.js
+    use error state in context provider
+  [Slide 20]
+    Additional information on json server
+    20
+    https://github.com/typicode/json-server
+  [Slide 21]
+    Creating a progress bar
+    21
+    Progress bar is empty almost immediately?
+    At first render a setInterval timer is created that changes the state after 10ms
+    Due to state change the function ProgressBar is executed again so a new setInterval timer is set that also changes the state after 10ms but in the main time the previous timer is also still running
+    New state change => new render => yet another extra setInterval, …
+  [Slide 22]
+    Stop endless loop using useEffect
+    22
+    Empty array => function inside useEffect is only executed at first render of the component
+  [Slide 23]
+    Still endless loop!
+    23
+    Remaining time < 0  => progress bar looks empty but setInterval is still running
+    Stop inteval once bar is empty
+  [Slide 24]
+    Still endless loop!
+    24
+    removing progress bar from the DOM with conditional rendering while bar is still running:
+    => setInterval keeps running even after removing the component from the DOM
+    => Memory leak!!
+  [Slide 25]
+    useEffect Cleanup function
+    25
+    General syntax:
+    Cleanup function will run just before unmounting the component
+
+=== 13-react-router.pptx (21 slides) ===
+  [Slide 1]
+    1
+    React router
+  [Slide 2]
+    React: SPA
+    2
+    1 HTML file: index.html
+    Single page application
+    Changing "page" is really just changing view!!
+    Routing:
+    load another component based on the path in the URL
+    the user is given the illusion that he is requesting other pages, but in     reality he remains on the same page
+  [Slide 3]
+    Routes
+    3
+    = link between path in URL and component to be displayed.
+    About
+    Home
+    Contact
+  [Slide 4]
+    Using routing
+    4
+    Routing is not build-in inside React
+    Extra package to allow for routing
+    Installation:
+    Usage:
+    Define the routes
+    Tell React where to render the components
+    > npm install react-router-dom
+  [Slide 5]
+    Define routes
+    5
+    Inside App.jsx before the function definition
+    1 route = JavaScript object with 2 key-value pairs:
+    path: 		contains the path after the domain			(e.g.: http://localhost:5173/about => path value = ‘/about’)
+    element: 	 contains the component to be activated via the route.
+    array of routes
+    2 routes
+    put components that will be loaded by routing in separate pages dir
+  [Slide 6]
+    Tell React where to render the components
+    6
+    Function App() :
+    starting point of the application
+    here you placed all the components you wanted to load
+    Insert component selected by route:
+    Import routerProvider:
+  [Slide 7]
+    Example
+    7
+    define routes
+    render components
+  [Slide 8]
+    Example
+    8
+    New component is loading
+    Click on ‘Courses’
+    HomePagecomponent
+    CoursesPage component
+  [Slide 9]
+    Usage of links inside the SPA
+    9
+    If you look closer at the previous example, notice that, when you click on a link, the entire application is reloaded.
+    This is not the behaviour we want!!
+    Loading a component takes considerably longer
+    The state of the application has been reset!
+    This is also what you get if the url is entered manually!
+    use Link instead of a tag with href!
+  [Slide 10]
+    Link
+    10
+    = React-router-dom component that:
+    changes the url
+    prevents it from being sent to the backend
+    needs ‘to’ attribute instead of ‘href’
+    Link is a React-router-dom component and therefore works only inside the components rendered by the router!!=> use a wrapper layout for all common parts
+  [Slide 11]
+    Wrapper layout: child routes
+    11
+    empty route points to RootLayout component
+    other routes are added as children
+    app now only contains RouterPovider
+  [Slide 12]
+    Relative vs absolute path
+    12
+    All routes start with ‘/’ => absolute path after domain name
+    Child routes have no leading ‘/’ => relative path after path of RootLayout component
+  [Slide 13]
+    Wrapper layout: outlet component
+    13
+    all components common to all pages (context, header, nav) are placed inside RootLayout
+    Components from child routes will be rendered inside Outlet component
+  [Slide 14]
+    Catching incorrect routes
+    14
+    Incorrect route is entered
+    Default React-router-dom error page is loaded
+    Add errorElement to root path as a fallback in case of incorrect routes
+    points to custom error page
+  [Slide 15]
+    Change layout of currently active link
+    15
+    NavLink component provides isActive property to className:
+    class if link is active
+    class if link is not active
+    to indicate that / link can only be active it it is the last part of the path
+  [Slide 16]
+    Programmatic navigation
+    16
+    Click button, end of long operation, …
+    => navigation needed in JavaScript
+    Go to a certain route in JavaScript code:
+    Import useNavigate from react-router-dom:
+    Store useNavigate result into constant for further use inside component function:
+    Whenever you want to navigate:
+    Only use programmatic navigation if a link is not possible
+  [Slide 17]
+    Define route with parameter(s)
+    17
+    not all routes have to be static
+    parameters like e.g. an ID, can be passed dynamically with routes
+    indicate dynamic part / parameter when defining the route with a ‘:’		{path:'/courses/:courseId', element: <CourseEdit />}
+    courseId is the name of the parameter and can have any value
+    without the parameter the route cannot be triggered.
+    the CourseEdit component can request the parameters.
+  [Slide 18]
+    Read parameter from route
+    18
+    import { useParams } from react-router-dom';
+    ⋮
+    export function CourseEdit() {
+    const params = useParams();
+    const [editCourse, setEditCourse] = useState(defaultCourse);
+    ⋮
+    useEffect(()=> {
+    async function getCourse() {
+    const resData = await getCourseWithIdFromDB(params.courseId)
+    setEditCourse(resData)
+    }
+    getCourse();
+    }, [params.courseId]);
+  [Slide 19]
+    Index route
+    19
+    default route (‘/’) is set by using index:true
+  [Slide 20]
+    Loading data with a loader
+    20
+    Without loader, data is fetched in useEffect => after first rendering of the component and all its children
+    With loader:
+    click on link
+    data belonging to that path is loaded
+    navigation to that link and rendering of components
+    Use loader attribute on the wanted path
+  [Slide 21]
+    Loading data with a loader
+    21
