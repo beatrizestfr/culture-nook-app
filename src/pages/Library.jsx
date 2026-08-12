@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLibrary } from '../store/LibraryContext';
 import ItemCard from '../components/ItemCard';
+import { Row, Col } from 'react-bootstrap';
 
 const FORMATS = ['All', 'Movies', 'Books', 'Albums'];
 const GENRES = ['All', 'Romance', 'Horror', 'Indie', 'Sci-Fi', 'Drama', 'Documentary', 'Fantasy', 'Thriller', 'Comedy', 'Mystery', 'Biography', 'Historical'];
@@ -87,13 +88,13 @@ export default function LibraryPage() {
           <Link to="/edit/new" className="btn btn-primary mt-3">Add your first item</Link>
         </div>
       ) : (
-        <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 g-3">
+        <Row className="row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 g-3">
           {filtered.map(item => (
-            <div key={item.id} className="col">
+            <Col key={item.id}>
               <ItemCard item={item} />
-            </div>
+            </Col>
           ))}
-        </div>
+        </Row>
       )}
     </div>
   );

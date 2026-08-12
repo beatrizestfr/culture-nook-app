@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 import { useLibrary } from '../store/LibraryContext';
 import MediaCover from './MediaCover';
 
@@ -55,13 +56,14 @@ export default function ListCard({ list }) {
             {list.itemIds?.length || 0} item{list.itemIds?.length !== 1 ? 's' : ''}
           </span>
           <div className="d-flex gap-3 align-items-center">
-            <button
+            <Button
               onClick={handleDelete}
-              className="btn btn-link p-0 text-muted"
+              variant="link"
+              className="p-0 text-muted"
               style={{ fontSize: 12 }}
             >
               Delete
-            </button>
+            </Button>
             <Link
               to={`/lists/${list.id}`}
               className="fw-semibold"

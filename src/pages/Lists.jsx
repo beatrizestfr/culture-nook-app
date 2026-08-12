@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Row, Col } from 'react-bootstrap';
 import { useLibrary } from '../store/LibraryContext';
 import ListCard from '../components/ListCard';
 
@@ -42,9 +43,9 @@ export default function ListsPage() {
             {lists.length} personal list{lists.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowForm(true)}>
+        <Button variant="primary" onClick={() => setShowForm(true)}>
           New list
-        </button>
+        </Button>
       </div>
 
       {error && <div className="alert alert-danger mb-4">{error}</div>}
@@ -54,8 +55,8 @@ export default function ListsPage() {
         <div className="card mb-4">
           <div className="card-body">
             <form onSubmit={handleCreate} noValidate>
-              <div className="row g-3">
-                <div className="col-12 col-sm-5">
+              <Row className="g-3">
+                <Col xs={12} sm={5}>
                   <label htmlFor="list-name" className="field-label">
                     List name <span className="text-danger">*</span>
                   </label>
@@ -69,8 +70,8 @@ export default function ListsPage() {
                     placeholder="Weekend watchlist"
                     autoFocus
                   />
-                </div>
-                <div className="col-12 col-sm-7">
+                </Col>
+                <Col xs={12} sm={7}>
                   <label htmlFor="list-description" className="field-label">Description</label>
                   <input
                     id="list-description"
@@ -80,18 +81,18 @@ export default function ListsPage() {
                     onChange={e => setDescription(e.target.value)}
                     placeholder="Optional note for this collection"
                   />
-                </div>
-              </div>
+                </Col>
+              </Row>
               {formError && <p className="text-danger mt-2 mb-0" style={{ fontSize: 13 }}>{formError}</p>}
               <div className="d-flex gap-2 mt-3">
-                <button type="submit" className="btn btn-primary">Create list</button>
-                <button
+                <Button type="submit" variant="primary">Create list</Button>
+                <Button
                   type="button"
-                  className="btn btn-outline-secondary"
+                  variant="outline-secondary"
                   onClick={() => { setShowForm(false); setFormError(''); }}
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             </form>
           </div>
@@ -105,19 +106,19 @@ export default function ListsPage() {
           <div className="card-body">
             <p className="page-title mb-2" style={{ fontSize: 22 }}>No lists yet</p>
             <p className="text-secondary mb-4" style={{ fontSize: 14 }}>Create your first personal list.</p>
-            <button className="btn btn-primary" onClick={() => setShowForm(true)}>
+            <Button variant="primary" onClick={() => setShowForm(true)}>
               Create your first list
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+        <Row className="row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
           {lists.map((list, index) => (
-            <div key={list.id} className="col">
+            <Col key={list.id}>
               <ListCard list={list} index={index} />
-            </div>
+            </Col>
           ))}
-        </div>
+        </Row>
       )}
     </div>
   );

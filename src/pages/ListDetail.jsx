@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Button, Row, Col } from 'react-bootstrap';
 import { useLibrary } from '../store/LibraryContext';
 import MediaCover from '../components/MediaCover';
 import StarRating from '../components/StarRating';
@@ -75,10 +76,10 @@ export default function ListDetailPage() {
                 required
                 autoFocus
               />
-              <button type="submit" className="btn btn-primary">Save</button>
-              <button type="button" className="btn btn-outline-secondary" onClick={() => setRenaming(false)}>
+              <Button type="submit" variant="primary">Save</Button>
+              <Button type="button" variant="outline-secondary" onClick={() => setRenaming(false)}>
                 Cancel
-              </button>
+              </Button>
             </form>
           ) : (
             <h1 className="page-title mb-1">{list.name}</h1>
@@ -88,15 +89,15 @@ export default function ListDetailPage() {
         </div>
 
         <div className="d-flex gap-2 flex-wrap">
-          <button
-            className="btn btn-outline-secondary"
+          <Button
+            variant="outline-secondary"
             onClick={() => { setRenaming(true); setNewName(list.name); }}
           >
             Rename
-          </button>
-          <button className="btn btn-outline-danger" onClick={handleDelete}>
+          </Button>
+          <Button variant="outline-danger" onClick={handleDelete}>
             Delete list
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -117,9 +118,9 @@ export default function ListDetailPage() {
             </option>
           ))}
         </select>
-        <button type="submit" className="btn btn-primary" disabled={!selectedItemId}>
+        <Button type="submit" variant="primary" disabled={!selectedItemId}>
           Add item
-        </button>
+        </Button>
       </form>
 
       {listItems.length === 0 ? (
@@ -128,9 +129,9 @@ export default function ListDetailPage() {
           <p style={{ fontSize: 14 }}>Add items from your library with the selector above.</p>
         </div>
       ) : (
-        <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 g-3">
+        <Row className="row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 g-3">
           {listItems.map(item => (
-            <div key={item.id} className="col">
+            <Col key={item.id}>
               <Link to={`/items/${item.id}`} className="d-block text-decoration-none">
                 <MediaCover item={item} />
                 <h3 className="mt-2 mb-0" style={{ fontFamily: 'var(--font-serif)', fontSize: 14, color: 'var(--text-primary)' }}>
@@ -139,15 +140,17 @@ export default function ListDetailPage() {
                 <p className="text-secondary mb-1" style={{ fontSize: 12 }}>{item.type}</p>
                 <StarRating rating={item.rating} />
               </Link>
-              <button
-                className="btn btn-outline-secondary btn-sm mt-2 w-100"
+              <Button
+                variant="outline-secondary"
+                size="sm"
+                className="mt-2 w-100"
                 onClick={() => handleRemoveItem(item.id)}
               >
                 Remove
-              </button>
-            </div>
+              </Button>
+            </Col>
           ))}
-        </div>
+        </Row>
       )}
     </div>
   );

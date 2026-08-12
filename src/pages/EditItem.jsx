@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Button, Row, Col } from 'react-bootstrap';
 import { useLibrary } from '../store/LibraryContext';
 import MediaCover from '../components/MediaCover';
 import StarRating from '../components/StarRating';
@@ -78,9 +79,9 @@ export default function EditItemPage() {
         Fill in the details. The more you add, the better your filters become.
       </p>
 
-      <div className="row g-4 align-items-start">
+      <Row className="g-4 align-items-start">
 
-        <div className="col-12 col-lg-8">
+        <Col xs={12} lg={8}>
           <form onSubmit={handleSubmit} noValidate>
 
             <div className="mb-3">
@@ -102,8 +103,8 @@ export default function EditItemPage() {
               )}
             </div>
 
-            <div className="row g-3 mb-3">
-              <div className="col-12 col-sm-6">
+            <Row className="g-3 mb-3">
+              <Col xs={12} sm={6}>
                 <label htmlFor="item-creator" className="field-label">Creator / Director / Artist</label>
                 <input
                   id="item-creator"
@@ -113,8 +114,8 @@ export default function EditItemPage() {
                   onChange={e => set('creator', e.target.value)}
                   placeholder="Donna Tartt"
                 />
-              </div>
-              <div className="col-12 col-sm-6">
+              </Col>
+              <Col xs={12} sm={6}>
                 <label htmlFor="item-year" className="field-label">Year</label>
                 <input
                   id="item-year"
@@ -126,8 +127,8 @@ export default function EditItemPage() {
                   onChange={e => set('year', e.target.value)}
                   placeholder="1992"
                 />
-              </div>
-            </div>
+              </Col>
+            </Row>
 
             <div className="mb-3">
               <label htmlFor="item-type" className="field-label">Format</label>
@@ -218,9 +219,9 @@ export default function EditItemPage() {
                   onKeyDown={addVibe}
                   placeholder="dark academia, cozy, slow-burn..."
                 />
-                <button type="button" onClick={addVibe} className="btn btn-outline-secondary">
+                <Button type="button" onClick={addVibe} variant="outline-secondary">
                   Add
-                </button>
+                </Button>
               </div>
               <div className="d-flex flex-wrap gap-2">
                 {form.vibes?.map(v => (
@@ -243,13 +244,13 @@ export default function EditItemPage() {
               <p className="text-danger mb-3" style={{ fontSize: 13 }}>{submitError}</p>
             )}
 
-            <button type="submit" className="btn btn-primary px-4 py-2">
+            <Button type="submit" variant="primary" className="px-4 py-2">
               {isNew ? 'Add to Library' : 'Save Changes'}
-            </button>
+            </Button>
           </form>
-        </div>
+        </Col>
 
-        <div className="col-12 col-lg-4">
+        <Col xs={12} lg={4}>
           <div className="position-lg-sticky" style={{ top: 80 }}>
             <p className="field-label mb-2">Live Preview</p>
             <div className="card p-3">
@@ -272,9 +273,9 @@ export default function EditItemPage() {
               <StarRating rating={form.rating} />
             </div>
           </div>
-        </div>
+        </Col>
 
-      </div>
+      </Row>
     </div>
   );
 }

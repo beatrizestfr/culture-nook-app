@@ -1,4 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Button, Row, Col } from 'react-bootstrap';
 import { useLibrary } from '../store/LibraryContext';
 import MediaCover from '../components/MediaCover';
 import StarRating from '../components/StarRating';
@@ -27,9 +28,9 @@ export default function ItemDetailPage() {
         ← Back to Library
       </Link>
 
-      <div className="row g-4 align-items-start">
+      <Row className="g-4 align-items-start">
 
-        <div className="col-12 col-md-4">
+        <Col xs={12} md={4}>
           <div className="mb-3 shadow-sm">
             <MediaCover item={item} />
           </div>
@@ -79,12 +80,12 @@ export default function ItemDetailPage() {
           <Link to={`/edit/${item.id}`} className="btn btn-primary w-100 mb-2">
             Edit item
           </Link>
-          <button className="btn btn-outline-danger w-100" onClick={handleDelete}>
+          <Button variant="outline-danger" className="w-100" onClick={handleDelete}>
             Delete item
-          </button>
-        </div>
+          </Button>
+        </Col>
 
-        <div className="col-12 col-md-8">
+        <Col xs={12} md={8}>
           <p className="field-label mb-1">
             {item.type?.toUpperCase()} {item.year && `· ${item.year}`}
           </p>
@@ -115,8 +116,8 @@ export default function ItemDetailPage() {
               </div>
             </div>
           )}
-        </div>
-      </div>
+        </Col>
+      </Row>
     </div>
   );
 }

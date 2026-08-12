@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { Button, Row, Col } from 'react-bootstrap';
 import { useLibrary } from '../store/LibraryContext';
 
 const QUOTE = {
@@ -34,9 +35,9 @@ export default function LoginPage() {
   const switchTab = (t) => { setTab(t); setError(''); setEmailDirty(false); };
 
   return (
-    <div className="row g-0 min-vh-100">
+    <Row className="g-0 min-vh-100">
 
-      <div className="col-md-5 login-panel-left d-none d-md-flex flex-column justify-content-between p-5">
+      <Col md={5} className="login-panel-left d-none d-md-flex flex-column justify-content-between p-5">
         <div>
           <div className="login-logo mb-4">CN</div>
           <h1 className="login-headline">
@@ -51,9 +52,9 @@ export default function LoginPage() {
           <p className="mb-2">"{QUOTE.text}"</p>
           <footer>— {QUOTE.author}</footer>
         </blockquote>
-      </div>
+      </Col>
 
-      <div className="col-12 col-md-7 d-flex flex-column justify-content-center p-4 p-md-5">
+      <Col xs={12} md={7} className="d-flex flex-column justify-content-center p-4 p-md-5">
         <div className="login-form-inner">
 
           <div className="tab-switcher mb-4">
@@ -132,27 +133,28 @@ export default function LoginPage() {
 
             {error && <p className="text-danger mb-3" style={{ fontSize: 13 }}>{error}</p>}
 
-            <button type="submit" className="btn btn-primary w-100 mt-3 py-3">
+            <Button type="submit" variant="primary" className="w-100 mt-3 py-3">
               {tab === 'signin' ? 'Sign in to my Nook' : 'Create my Nook'}
-            </button>
+            </Button>
           </form>
 
           <hr className="my-4" />
 
           <p className="text-center text-secondary" style={{ fontSize: 13 }}>
             {tab === 'signin' ? "Don't have an account? " : "Already have an account? "}
-            <button
+            <Button
               type="button"
-              className="btn btn-link p-0 fw-semibold"
+              variant="link"
+              className="p-0 fw-semibold"
               style={{ fontSize: 13, color: 'var(--accent)' }}
               onClick={() => switchTab(tab === 'signin' ? 'register' : 'signin')}
             >
               {tab === 'signin' ? "Create one — it's free" : 'Sign in'}
-            </button>
+            </Button>
           </p>
 
         </div>
-      </div>
-    </div>
+      </Col>
+    </Row>
   );
 }
